@@ -119,12 +119,16 @@
     clearExpenseLimit: async (uid) => {
       await setDoc(doc(db, "users", uid, "settings", "expenseLimit"), { amount: null, active: false }, { merge: true });
     },
-    addCategory: async (uid, type, name, icon) => {
+    addCategory: async (uid, type, name, icon, limit = 0) => {
       if (type === "income") {
         await setDoc(doc(db, "users", uid, "categories_income", name), { name, icon });
       } else {
-        await setDoc(doc(db, "users", uid, "categories_expense", name), { name, icon });
+        await setDoc(doc(db, "users", uid, "categories_expense", name), { name, icon, limit });
       }
+    },
+    updateCategory: async (uid, type, name, updated) => {
+      const col = type === "income" ? "categories_income" : "categories_expense";
+      await updateDoc(doc(db, "users", uid, col, name), updated);
     },
     addSavingsContribution: async (uid, contribution) => {
       const contribRef = await addDoc(collection(db, "users", uid, "savings_contributions"), {
@@ -732,10 +736,29 @@ display: none;
           </div>
         </div>
       </div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;margin:12px 0;">
-        <button class="btn btn-small" id="btn-add-income-main">+ Ingreso</button>
-        <button class="btn btn-small" id="btn-add-expense-main">+ Gasto</button>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin:12px 0;justify-content: space-between;align-items: center;">
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <button class="btn btn-small" id="btn-add-income-main">+ Ingreso</button>
+          <button class="btn btn-small" id="btn-add-expense-main">+ Gasto</button>
+        </div>
+        <button class="btn btn-small btn-outline" id="btn-export-csv">📥 Exportar CSV</button>
       </div>
+
+      <!-- Filtros -->
+      <div class="card" style="padding:10px; margin-bottom:12px; background:rgba(255,255,255,0.02); gap: 8px;">
+        <div class="flex" style="gap:8px;">
+          <input type="text" id="filter-search" class="input" placeholder="🔍 Buscar descripción..." style="flex:2; min-width:150px;">
+          <select id="filter-category" class="select" style="flex:1; min-width:120px;">
+            <option value="">Todas las categorías</option>
+          </select>
+          <select id="filter-type" class="select" style="flex:1; min-width:100px;">
+            <option value="">Todos los tipos</option>
+            <option value="income">Ingresos</option>
+            <option value="expense">Gastos</option>
+          </select>
+        </div>
+      </div>
+
       <div style="overflow:auto;">
         <table>
           <thead>
@@ -806,7 +829,15 @@ display: none;
     </div>
   </div>
 </div>
-      <div class="card" style="margin-top:6px;padding:10px;">
+      <div class="card" style="margin-top:14px;padding:10px;">
+        <div><strong>Tendencia Mensual</strong></div>
+        <div class="small">Ingresos vs Gastos en los últimos meses</div>
+        <div class="chart-container" style="min-height: 200px;">
+          <canvas id="chart-monthly-trend"></canvas>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:14px;padding:10px;">
         <div><strong>Desglose por categoría (gastos)</strong></div>
         <div class="small">A dónde se va tu dinero</div>
         <div class="chart-container">
@@ -967,6 +998,25 @@ display: none;
             <div class="small">Cumplimiento de meta</div>
             <div id="ratio-goal" style="font-size:1.1rem;">—</div>
           </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:20px;">
+        <div><strong>Presupuestos por Categoría</strong></div>
+        <div class="small">Controla cuánto gastas en cada área.</div>
+        <div style="overflow:auto; margin-top:10px;">
+          <table style="font-size: 0.85rem;">
+            <thead>
+              <tr>
+                <th>Categoría</th>
+                <th>Límite Mensual</th>
+                <th>Gastado</th>
+                <th>Progreso</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="category-budgets-body"></tbody>
+          </table>
         </div>
       </div>
 
@@ -1162,6 +1212,7 @@ display: none;
   const ctxIncomeVsExpense = document.getElementById("chart-income-vs-expense");
   const ctxGoalProgress = document.getElementById("chart-goal-progress");
   const ctxCategoryExpense = document.getElementById("chart-category-expense");
+  const ctxMonthlyTrend = document.getElementById("chart-monthly-trend");
   const goalPercent = document.getElementById("goal-percent");
   const circlePercentText = document.getElementById("circle-percent-text");
   const goalDetail = document.getElementById("goal-detail");
@@ -1193,9 +1244,16 @@ display: none;
   const expenseLimitStatus = document.getElementById("expense-limit-status");
   const btnSetExpenseLimit = document.getElementById("btn-set-expense-limit");
   const btnClearExpenseLimit = document.getElementById("btn-clear-expense-limit");
+  const categoryBudgetsBody = document.getElementById("category-budgets-body");
 
   const btnGenerateReport = document.getElementById("btn-generate-report");
   const monthlyReportsTable = document.getElementById("monthly-reports-table");
+
+  // Filter elements
+  const filterSearch = document.getElementById("filter-search");
+  const filterCategory = document.getElementById("filter-category");
+  const filterType = document.getElementById("filter-type");
+  const btnExportCsv = document.getElementById("btn-export-csv");
 
   const bottomNavItems = document.querySelectorAll(".nav-item");
   const bottomNav = document.getElementById("bottom-nav");
@@ -1242,11 +1300,17 @@ display: none;
     expenseLimit: { amount: null, active: false },
     contributions: [],
     withdrawals: [],
-    monthlyReports: []
+    monthlyReports: [],
+    filters: {
+      search: "",
+      category: "",
+      type: ""
+    }
   };
   let chartIncomeVsExpense = null;
   let chartGoalProgress = null;
   let chartCategoryExpense = null;
+  let chartMonthlyTrend = null;
   let chartReportIncomeVsExpense = null;
   let chartReportCategoryExpense = null;
 
@@ -1521,10 +1585,14 @@ display: none;
         const dt = d.data();
         if (dt?.name) {
           state.expenseCategories.push(dt.name);
-          state.expenseCategoriesMeta[dt.name] = { icon: dt.icon || "💸" };
+          state.expenseCategoriesMeta[dt.name] = {
+            icon: dt.icon || "💸",
+            limit: dt.limit || 0
+          };
         }
       });
       setReady("expenseCats");
+      refreshAllViews();
     });
 
     const goalDoc = doc(window.Firebase.db, "users", uid, "settings", "goal");
@@ -1580,6 +1648,7 @@ display: none;
       snap.forEach(d => state.monthlyReports.push({ id: d.id, ...d.data() }));
       setReady("monthlyReports");
       renderMonthlyReportsTable();
+      drawCharts(); // Redraw trend chart when reports change
     });
   }
 
@@ -1675,6 +1744,18 @@ display: none;
     toggleExpenseLimit.checked = state.expenseLimit.active;
     expenseLimitStatus.textContent = state.expenseLimit.active ? 'Activo' : 'Inactivo';
 
+    // Update filter categories
+    const currentFilterCat = filterCategory.value;
+    filterCategory.innerHTML = '<option value="">Todas las categorías</option>';
+    const allCats = [...new Set([...state.incomeCategories, ...state.expenseCategories])].sort();
+    allCats.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c;
+      opt.textContent = c;
+      filterCategory.appendChild(opt);
+    });
+    filterCategory.value = currentFilterCat;
+
     // === Actualización de la sección de Ahorro ===
     saveGoalDisplay.textContent = state.goal !== null ? formatMoney(state.goal) : "—";
     saveNet.textContent = formatMoney(contributions);
@@ -1727,16 +1808,106 @@ display: none;
     }
 
     renderInicioTable();
+    renderCategoryBudgets();
     drawCharts();
     attachContributionActions();
     attachWithdrawalActions();
     updateDateDisplays();
   }
 
+  function renderCategoryBudgets() {
+    categoryBudgetsBody.innerHTML = "";
+    const now = convertToUTCMinus5(new Date().toISOString());
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    const expenseByCat = {};
+    state.transactions.filter(t => {
+      const txDate = convertToUTCMinus5(t.date);
+      return t.type === 'expense' && txDate.getMonth() === currentMonth && txDate.getFullYear() === currentYear;
+    }).forEach(t => {
+      expenseByCat[t.category] = (expenseByCat[t.category] || 0) + Number(t.amount);
+    });
+
+    state.expenseCategories.sort().forEach(cat => {
+      const meta = state.expenseCategoriesMeta[cat];
+      const limit = meta.limit || 0;
+      const spent = expenseByCat[cat] || 0;
+      const pct = limit > 0 ? Math.min(100, (spent / limit) * 100) : 0;
+      const color = pct >= 100 ? "#f87171" : (pct >= 80 ? "#fbbf24" : "#10b981");
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${meta.icon} ${cat}</td>
+        <td>${limit > 0 ? formatMoney(limit) : '<span class="small">Sin límite</span>'}</td>
+        <td>${formatMoney(spent)}</td>
+        <td>
+          <div style="width:100%; background:rgba(255,255,255,0.1); height:8px; border-radius:4px; overflow:hidden;">
+            <div style="width:${limit > 0 ? pct : 0}%; background:${color}; height:100%;"></div>
+          </div>
+          <div class="small">${limit > 0 ? pct.toFixed(1) + '%' : '—'}</div>
+        </td>
+        <td>
+          <button class="btn-small btn-outline" data-action="set-cat-limit" data-cat="${cat}">⚙️</button>
+        </td>
+      `;
+      categoryBudgetsBody.appendChild(tr);
+    });
+
+    categoryBudgetsBody.querySelectorAll("[data-action='set-cat-limit']").forEach(btn => {
+      btn.onclick = () => {
+        if (!currentUid || isGuestUser) {
+          showRegistrationPrompt("Para establecer límites por categoría, por favor regístrate.");
+          return;
+        }
+        const cat = btn.getAttribute("data-cat");
+        const meta = state.expenseCategoriesMeta[cat];
+        const newLimit = prompt(`Establecer límite mensual para ${cat}:`, meta.limit || 0);
+        if (newLimit !== null) {
+          const val = parseFloat(newLimit);
+          if (!isNaN(val) && val >= 0) {
+            window.FirebaseHelpers.updateCategory(currentUid, "expense", cat, { limit: val });
+            showAlert("Éxito", `Límite para ${cat} actualizado.`);
+          } else {
+            showAlert("Error", "Monto inválido.");
+          }
+        }
+      };
+    });
+  }
+
   function renderInicioTable() {
     txTableBodyInicio.innerHTML = "";
-    const sorted = state.transactions.slice().sort((a,b)=> new Date(b.date) - new Date(a.date));
+
+    // Apply filters
+    let filtered = state.transactions.slice();
+    if (state.filters.search) {
+      const s = state.filters.search.toLowerCase();
+      filtered = filtered.filter(t => (t.desc || "").toLowerCase().includes(s) || (t.category || "").toLowerCase().includes(s));
+    }
+    if (state.filters.category) {
+      filtered = filtered.filter(t => t.category === state.filters.category);
+    }
+    if (state.filters.type) {
+      filtered = filtered.filter(t => t.type === state.filters.type);
+    }
+
+    const sorted = filtered.sort((a,b)=> new Date(b.date) - new Date(a.date));
+
+    // Group by date
+    let lastDate = null;
+
     sorted.forEach(t => {
+      const txDateObj = convertToUTCMinus5(t.date);
+      const dateStr = txDateObj.toLocaleDateString("es-CO", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+      if (dateStr !== lastDate) {
+        const dateRow = document.createElement("tr");
+        dateRow.innerHTML = `<td colspan="6" style="background:rgba(255,255,255,0.05); font-weight:bold; font-size:0.75rem; padding: 4px 12px;">${dateStr.toUpperCase()}</td>`;
+        txTableBodyInicio.appendChild(dateRow);
+        lastDate = dateStr;
+      }
+
       const tr = document.createElement("tr");
       const typeBadge = t.type==="income" ? `<span class="pill-small" style="background:#10b981;">Ingreso</span>`
         : `<span class="pill-small" style="background:#f87171;">Gasto</span>`;
@@ -1871,6 +2042,49 @@ display: none;
         },
         responsive:true,
         maintainAspectRatio:false
+      }
+    });
+
+    // Monthly Trend Chart
+    if (chartMonthlyTrend) chartMonthlyTrend.destroy();
+    const sortedReports = state.monthlyReports.slice().sort((a, b) => new Date(a.created) - new Date(b.created)).slice(-6);
+    const trendLabels = sortedReports.map(r => r.month);
+    const trendIncomes = sortedReports.map(r => r.incomes);
+    const trendExpenses = sortedReports.map(r => r.expenses);
+
+    chartMonthlyTrend = new Chart(ctxMonthlyTrend, {
+      type: "line",
+      data: {
+        labels: trendLabels,
+        datasets: [
+          {
+            label: "Ingresos",
+            data: trendIncomes,
+            borderColor: "#10b981",
+            backgroundColor: "rgba(16, 185, 129, 0.1)",
+            fill: true,
+            tension: 0.4
+          },
+          {
+            label: "Gastos",
+            data: trendExpenses,
+            borderColor: "#f87171",
+            backgroundColor: "rgba(248, 113, 113, 0.1)",
+            fill: true,
+            tension: 0.4
+          }
+        ]
+      },
+      options: {
+        plugins: {
+          legend: { position: "bottom", labels: { boxWidth: 12 } },
+          tooltip: { callbacks: { label: c => `${c.dataset.label}: ${formatMoney(c.parsed.y)}` } }
+        },
+        scales: {
+          y: { beginAtZero: true, ticks: { callback: v => "$" + Number(v).toLocaleString() } }
+        },
+        responsive: true,
+        maintainAspectRatio: false
       }
     });
   }
@@ -2577,6 +2791,63 @@ display: none;
       resetFeedbackMessage.style.display = "none"; // Hide any previous feedback
     };
   };
+
+  // Filters listeners
+  filterSearch.addEventListener("input", (e) => {
+    state.filters.search = e.target.value;
+    renderInicioTable();
+  });
+  filterCategory.addEventListener("change", (e) => {
+    state.filters.category = e.target.value;
+    renderInicioTable();
+  });
+  filterType.addEventListener("change", (e) => {
+    state.filters.type = e.target.value;
+    renderInicioTable();
+  });
+
+  btnExportCsv.addEventListener("click", () => {
+    if (state.transactions.length === 0) {
+      showAlert("Información", "No hay transacciones para exportar.");
+      return;
+    }
+
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Fecha,Tipo,Monto,Categoría,Descripción\n";
+
+    // Use current filtered and sorted transactions
+    let filtered = state.transactions.slice();
+    if (state.filters.search) {
+      const s = state.filters.search.toLowerCase();
+      filtered = filtered.filter(t => (t.desc || "").toLowerCase().includes(s) || (t.category || "").toLowerCase().includes(s));
+    }
+    if (state.filters.category) {
+      filtered = filtered.filter(t => t.category === state.filters.category);
+    }
+    if (state.filters.type) {
+      filtered = filtered.filter(t => t.type === state.filters.type);
+    }
+    const sorted = filtered.sort((a,b)=> new Date(b.date) - new Date(a.date));
+
+    sorted.forEach(t => {
+      const date = convertToUTCMinus5(t.date).toLocaleDateString("es-CO");
+      const type = t.type === "income" ? "Ingreso" : "Gasto";
+      const amount = t.amount;
+      const cat = t.category || "";
+      const desc = (t.desc || "").replace(/,/g, " "); // Basic CSV escaping
+      csvContent += `${date},${type},${amount},${cat},${desc}\n`;
+    });
+
+    const blob = new Blob([csvContent.replace("data:text/csv;charset=utf-8,", "")], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `finanzas_${new Date().toISOString().slice(0,10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  });
 
   // nav
   bottomNavItems.forEach(item => {
