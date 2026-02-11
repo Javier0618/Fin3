@@ -3,7 +3,15 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>Fin3</title>
+<title>Fin3 — Finanzas Personales</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <!-- Firebase SDK -->
 <script type="module">
@@ -245,70 +253,276 @@
 display: none;
 }
   :root {
-    --bg:#0f172a;
-    --card:#1f2a44;
-    --radius:14px;
-    --shadow:0 16px 40px -10px rgba(0,0,0,.55);
-    --text:#e6edf9;
-    --muted:#8892b0;
-    --accent:#6366f1;
-    font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    --bg: #0b0f1a;
+    --card: #161c2d;
+    --card-hover: #1c243a;
+    --radius: 18px;
+    --shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.5);
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --accent: #8b5cf6;
+    --accent-light: #a78bfa;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --info: #3b82f6;
+    --glass: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   }
-  *{box-sizing:border-box;}
-  html{font-size:16px;}
-  body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);padding-bottom:90px;line-height:1.35;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;}
-  .container{max-width:1120px;margin:0 auto;padding:.75rem;}
-  .card{background:var(--card);padding:1rem;border-radius:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:1rem;position:relative;}
-  h1{margin:0;font-size:clamp(1.25rem,2vw + .5rem,1.75rem);}
-  .small{font-size:.75rem;color:var(--muted);}
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+  html{font-size:16px; scroll-behavior: smooth;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background: var(--bg);
+    background: radial-gradient(circle at top right, #1e1b4b, #0b0f1a 40%);
+    color:var(--text);
+    padding-bottom:90px;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+  .container{max-width:1120px;margin:0 auto;padding:1rem;}
+  .card{
+    background:var(--card);
+    padding:1.5rem;
+    border-radius: var(--radius);
+    box-shadow:var(--shadow);
+    display:flex;
+    flex-direction:column;
+    gap:1.25rem;
+    position:relative;
+    border: 1px solid var(--glass-border);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card:hover {
+    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6);
+  }
+  h1, h2, h3{margin:0; font-weight: 700; letter-spacing: -0.025em;}
+  h1{font-size:clamp(1.5rem, 3vw, 2.25rem);}
+  .small{font-size:.8rem;color:var(--muted); font-weight: 500;}
   .flex{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;}
-  .btn{cursor:pointer;border:none;padding:.55rem 1rem;border-radius:999px;font-weight:600;background:var(--accent);color:#fff;font-size:.85rem;display:inline-flex;gap:.35rem;white-space:nowrap;align-items: center;}
-  .btn-small{padding:.35rem .75rem;font-size:.65rem;border-radius:8px;}
-  .btn-outline{background:transparent;border:1px solid rgba(255,255,255,.2);color:var(--text);}
-  .input, .select{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);padding:.6rem .75rem;border-radius:8px;width:100%;color:var(--text);font-size:.85rem;outline:none;}
-  .pill-small{background:rgba(255,255,255,.05);padding:.3rem .65rem;border-radius:999px;font-size:.6rem;display:inline-block;}
-  .summary{display:flex;gap:1rem;flex-wrap:wrap;}
-  .summary-card{flex:1;min-width:140px;background:rgba(255,255,255,.04);padding:10px;border-radius:10px;display:flex;flex-direction:column;gap:6px;}
-  .chart-container{position:relative;width:100%;min-height:160px;margin-top:6px;}
-  table{width:100%;border-collapse:collapse;font-size:.8rem;margin-top:6px;}
-  thead th{text-align:left;padding:.5rem .75rem;position:sticky;top:0;background:rgba(31,42,68,.95);z-index:1;font-weight:600;}
-  tbody td{padding:.5rem .75rem;border-top:1px solid rgba(255,255,255,.07);vertical-align:top;}
-  .total-box{flex:1;min-width:140px;background:rgba(255,255,255,.05);padding:16px;border-radius:12px;display:flex;flex-direction:column;align-items:flex-start;gap:6px;}
-  .total-value{font-size:clamp(1.5rem,4vw,2.5rem);font-weight:700;}
-  /* Added flex to total-value to align percentage next to it */
-  .total-value-with-percentage {
-    display: flex;
-    align-items: baseline; /* Align text baselines */
-    gap: 8px; /* Space between value and percentage */
+
+  .btn{
+    cursor:pointer;
+    border:none;
+    padding:.75rem 1.25rem;
+    border-radius: 12px;
+    font-weight:600;
+    background:var(--accent);
+    color:#fff;
+    font-size:.9rem;
+    display:inline-flex;
+    gap:.5rem;
+    white-space:nowrap;
+    align-items: center;
+    transition: all 0.2s ease;
+    justify-content: center;
   }
-  .total-value-with-percentage .percentage-text {
-    font-size: 0.8em; /* Make percentage text smaller than main value */
-    color: var(--muted); /* Muted color for percentage */
-    font-weight: normal; /* Normal weight for percentage */
+  .btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+    box-shadow: 0 10px 20px -5px rgba(139, 92, 246, 0.4);
+  }
+  .btn:active { transform: translateY(0); }
+
+  .btn-small{padding:.45rem .9rem;font-size:.75rem;border-radius:10px;}
+  .btn-outline{
+    background:transparent;
+    border:1px solid var(--glass-border);
+    color:var(--text);
+  }
+  .btn-outline:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.2);
   }
 
-  .nav-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
-  .user-box{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
-  .footer{margin-top:2rem;text-align:center;font-size:.65rem;color:var(--muted);}
-  .bottom-nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:rgba(31,42,68,.97);display:flex;justify-content:space-around;align-items:center;border-top:1px solid rgba(255,255,255,.08);z-index:50;font-size:.6rem;}
-  .nav-item{flex:1;text-align:center;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;user-select:none;position:relative;}
-  .nav-item.active{color:#fff;font-weight:600;}
-  .section{display:none;}
+  .input, .select{
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    padding: .75rem 1rem;
+    border-radius: 12px;
+    width: 100%;
+    color: var(--text);
+    font-size: .9rem;
+    outline: none;
+    transition: all 0.2s ease;
+  }
+  .input:focus, .select:focus {
+    border-color: var(--accent);
+    background: rgba(255,255,255,0.05);
+    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+  }
+
+  .pill-small{
+    background: rgba(255,255,255,0.08);
+    padding: .35rem .75rem;
+    border-radius: 999px;
+    font-size: .7rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .summary{display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:1rem;}
+  .summary-card{
+    background: var(--glass);
+    padding: 1.25rem;
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border: 1px solid var(--glass-border);
+  }
+
+  .chart-container{position:relative;width:100%;min-height:220px;margin-top:10px;}
+
+  table{width:100%;border-collapse:separate; border-spacing: 0 8px; font-size:.85rem; margin-top:6px;}
+  thead th{
+    text-align:left;
+    padding: 1rem;
+    color: var(--muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+  tbody tr {
+    background: rgba(255,255,255,0.02);
+    transition: background 0.2s ease;
+  }
+  tbody tr:hover {
+    background: rgba(255,255,255,0.05);
+  }
+  tbody td{
+    padding: 1rem;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    vertical-align: middle;
+  }
+  tbody td:first-child {
+    border-left: 1px solid transparent;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+  }
+  tbody td:last-child {
+    border-right: 1px solid transparent;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+
+  .total-box{
+    flex:1;
+    min-width:240px;
+    background: var(--glass);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid var(--glass-border);
+    position: relative;
+    overflow: hidden;
+  }
+  .total-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 4px; height: 100%;
+    background: var(--accent);
+  }
+  .total-box.income::before { background: var(--success); }
+  .total-box.expense::before { background: var(--danger); }
+
+  .total-value{font-size:clamp(1.75rem, 4vw, 2.5rem);font-weight:800; letter-spacing: -0.05em;}
+  .total-value-with-percentage {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .total-value-with-percentage .percentage-text {
+    font-size: 0.45em;
+    color: var(--muted);
+    font-weight: 600;
+    background: rgba(255,255,255,0.05);
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+
+  .nav-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    margin-bottom: 1.5rem;
+  }
+  .user-box{display:flex;gap:12px;align-items:center;}
+
+  .footer{padding: 3rem 0; text-align:center;font-size:.8rem;color:var(--muted); opacity: 0.6;}
+
+  .bottom-nav{
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    height: 70px;
+    background: rgba(22, 28, 45, 0.8);
+    backdrop-filter: blur(20px);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    z-index: 1000;
+  }
+  .nav-item{
+    flex: 1;
+    text-align: center;
+    color: var(--muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    height: 100%;
+  }
+  .nav-item i { font-size: 1.25rem; transition: transform 0.3s ease; }
+  .nav-item span { font-size: 0.7rem; font-weight: 600; }
+  .nav-item.active{color: var(--accent);}
+  .nav-item.active i { transform: translateY(-4px); color: var(--accent); }
+
+  .section{display:none; animation: fadeIn 0.4s ease-out;}
   .section.active{display:block;}
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
   .percent-circle{position:relative;width:90px;height:90px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,.06);}
   .percent-text{position:absolute;font-weight:700;font-size:.9rem;}
   .badge-goal{background:#10b981;padding:.35rem .65rem;border-radius:999px;font-size:.55rem;color:#fff;display:inline-flex;gap:6px;align-items:center;}
   /* loader */
   #loader-overlay{
-    position:fixed;inset:0;backdrop-filter:blur(6px);background:rgba(15,23,42,.95);display:none;align-items:center;justify-content:center;z-index:1000;
+    position:fixed;inset:0;backdrop-filter:blur(15px);background:rgba(11, 15, 26, 0.9);display:none;align-items:center;justify-content:center;z-index:2000;
   }
-  .loader-box{background:var(--card);padding:24px;border-radius:14px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:16px;align-items:center;box-shadow:var(--shadow);}
-  .bar{width:100%;background:rgba(255,255,255,.1);height:10px;border-radius:6px;overflow:hidden;}
-  .bar-inner{height:100%;width:0%;background:var(--accent);border-radius:6px;transition:width .3s;}
+  .loader-box{
+    background:var(--card);
+    padding:2.5rem;
+    border-radius: 24px;
+    max-width:320px;
+    width:90%;
+    display:flex;
+    flex-direction:column;
+    gap:1.5rem;
+    align-items:center;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--glass-border);
+  }
+  .bar{width:100%;background:rgba(255,255,255,.05);height:8px;border-radius:99px;overflow:hidden;}
+  .bar-inner{height:100%;width:0%;background:var(--accent);border-radius:99px;transition:width .4s cubic-bezier(0.4, 0, 0.2, 1);}
 
   #modal-body {
     max-height: 70vh; /* Define una altura máxima, por ejemplo, el 70% del viewport height */
@@ -318,7 +532,9 @@ display: none;
 
   /* Auth forms correction */
   #login-form, #register-form {
-    display: block; /* Ensure they take up full width */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
   #register-form.hidden, #login-form.hidden {
     display: none;
@@ -328,13 +544,13 @@ display: none;
   #confirmation-modal {
     position: fixed;
     inset: 0;
-    background: rgba(15, 23, 42, .95);
-    backdrop-filter: blur(12px);
+    background: rgba(11, 15, 26, 0.8);
+    backdrop-filter: blur(15px);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 1rem;
-    z-index: 100; /* Higher than other modals */
+    z-index: 1500;
   }
 
   #confirmation-modal .card {
@@ -385,13 +601,13 @@ display: none;
   #alert-modal {
     position: fixed;
     inset: 0;
-    background: rgba(15, 23, 42, .95);
-    backdrop-filter: blur(12px);
+    background: rgba(11, 15, 26, 0.8);
+    backdrop-filter: blur(15px);
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 1rem;
-    z-index: 101; /* Higher than confirmation modal */
+    z-index: 1600;
   }
 
   #alert-modal .card {
@@ -613,6 +829,10 @@ display: none;
 .limit-exceeded {
   color: #f87171 !important; /* Red color for exceeded limit */
 }
+
+  @media (max-width: 768px) {
+    .hide-mobile { display: none !important; }
+  }
 </style>
 </head>
 <body>
@@ -685,16 +905,27 @@ display: none;
 
 <!-- App -->
 <div id="app" class="container" style="display:none; padding-bottom:100px;">
-  <div class="nav-top">
-    <div>
-      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjycXvbVa8ip01O7SowmGyv2HTbkwohu6i-e-MOn5nd2t9Sf1PaCrxaZJKRyp4dBtGgri2uchbSQzbcTKxd6aVMjLyvmUEDG03cEZf9xstwPKusFNUjV94Ogb3pUjVBD0sWbhAW76eb00B-lvem0Idanc-RSLrnczlBQtE2cw_8vpD6D5E/s1600/transparent-Photoroom.png" alt="Fin3 Logo" style="width: 100px; height: auto;">
-      <div class="small" style="font-size: .68rem;">Administra tu dinero</div>
+  <!-- Header -->
+  <header class="nav-top">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div style="background: var(--accent); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 16px rgba(139, 92, 246, 0.3);">
+        <i class="fa-solid fa-wallet" style="color: white; font-size: 1.25rem;"></i>
+      </div>
+      <div>
+        <h2 style="font-size: 1.25rem; line-height: 1;">Fin3</h2>
+        <div class="small" style="font-size: .7rem; opacity: 0.8;">Tu libertad financiera</div>
+      </div>
     </div>
     <div class="user-box">
-      <button class="btn btn-small btn-outline" id="btn-logout">Cerrar sesión</button>
-      <button class="btn btn-small" id="btn-register-now" style="display:none;">Registrarse</button>
+      <div id="user-display-name" style="margin-right: 10px; font-weight: 600; font-size: 0.9rem;" class="hide-mobile"></div>
+      <button class="btn btn-small btn-outline" id="btn-logout">
+        <i class="fa-solid fa-right-from-bracket"></i> <span class="hide-mobile">Cerrar sesión</span>
+      </button>
+      <button class="btn btn-small" id="btn-register-now" style="display:none;">
+        <i class="fa-solid fa-user-plus"></i> Registrarse
+      </button>
     </div>
-  </div>
+  </header>
 
   <!-- Inicio -->
   <div id="inicio-section" class="section active">
@@ -711,22 +942,29 @@ display: none;
         </div>
       </div>
       <div class="big-total" style="display:flex;gap:16px;flex-wrap:wrap;">
-        <div class="total-box">
-          <div><strong>Total ingresos</strong></div>
-          <div id="inicio-total-income" class="total-value" style="color:#10b981;">$0.00</div>
+        <div class="total-box income">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="small" style="color: var(--success); font-weight: 700;">TOTAL INGRESOS</span>
+            <i class="fa-solid fa-circle-up" style="color: var(--success); opacity: 0.5;"></i>
+          </div>
+          <div id="inicio-total-income" class="total-value" style="color: var(--success);">$0.00</div>
         </div>
-        <div class="total-box">
-          <div><strong>Total gastos</strong></div>
-          <!-- MODIFICACIÓN: Contenedor para el valor y el porcentaje de gastos -->
-          <div class="total-value total-value-with-percentage" style="color:#f87171;">
+        <div class="total-box expense">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="small" style="color: var(--danger); font-weight: 700;">TOTAL GASTOS</span>
+            <i class="fa-solid fa-circle-down" style="color: var(--danger); opacity: 0.5;"></i>
+          </div>
+          <div class="total-value total-value-with-percentage" style="color: var(--danger);">
             <span id="inicio-total-expense">$0.00</span>
             <span id="expense-percentage" class="percentage-text"></span>
           </div>
         </div>
         <div class="total-box">
-          <div><strong>Dinero Disponible</strong></div>
-          <!-- MODIFICACIÓN: Contenedor para el valor y el porcentaje de dinero disponible -->
-          <div class="total-value total-value-with-percentage" style="color:var(--accent);">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="small" style="color: var(--accent); font-weight: 700;">DISPONIBLE</span>
+            <i class="fa-solid fa-scale-balanced" style="color: var(--accent); opacity: 0.5;"></i>
+          </div>
+          <div class="total-value total-value-with-percentage" style="color: var(--text);">
             <span id="inicio-available-money">$0.00</span>
             <span id="available-percentage" class="percentage-text"></span>
           </div>
@@ -831,66 +1069,76 @@ display: none;
 
   <!-- Ahorro -->
   <div id="ahorro-section" class="section">
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;">
+    <div class="card" style="border: none; background: transparent; box-shadow: none; padding: 0;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap; margin-bottom: 1.5rem;">
         <div>
-          <div style="font-size:1.2rem;font-weight:600;">Ahorro</div>
-          <div class="small">Meta, aportes y retiros</div>
+          <h2 style="font-size: 1.5rem;">Mis Ahorros</h2>
+          <div class="small">Planifica y alcanza tus metas</div>
         </div>
-        <!-- Nuevo div para la fecha en Ahorro -->
-        <div id="ahorro-date-display" style="text-align: right;">
-          <div id="ahorro-current-year" style="font-size: 1.5rem; font-weight: 600;"></div>
+        <div id="ahorro-date-display" style="text-align: right;" class="hide-mobile">
+          <div id="ahorro-current-year" style="font-size: 1.5rem; font-weight: 700; color: var(--accent);"></div>
           <div id="ahorro-current-month-day" class="small"></div>
         </div>
       </div>
-      <div class="summary" style="margin-top:6px;">
-        <div class="summary-card">
-          <div><strong>Meta actual</strong></div>
-          <div id="save-goal-display" style="font-size:1.3rem;">—</div>
+
+      <div class="summary">
+        <div class="summary-card" style="border-top: 4px solid var(--accent);">
+          <div class="small" style="text-transform: uppercase; font-weight: 700;">Meta Actual</div>
+          <div id="save-goal-display" style="font-size:1.5rem; font-weight: 800; color: var(--text);">—</div>
+          <i class="fa-solid fa-bullseye" style="position: absolute; right: 1.5rem; top: 1.5rem; font-size: 1.5rem; opacity: 0.1;"></i>
         </div>
-        <div class="summary-card">
-          <div><strong>Ahorro neto</strong></div>
-          <div id="save-net" style="font-size:1.3rem;">—</div>
+        <div class="summary-card" style="border-top: 4px solid var(--success);">
+          <div class="small" style="text-transform: uppercase; font-weight: 700;">Ahorro Neto</div>
+          <div id="save-net" style="font-size:1.5rem; font-weight: 800; color: var(--success);">—</div>
+          <i class="fa-solid fa-vault" style="position: absolute; right: 1.5rem; top: 1.5rem; font-size: 1.5rem; opacity: 0.1;"></i>
         </div>
-        <div class="summary-card">
-          <div><strong>Aportes totales</strong></div>
-          <div id="save-contribs" style="font-size:1.3rem;">—</div>
+        <div class="summary-card" style="border-top: 4px solid var(--info);">
+          <div class="small" style="text-transform: uppercase; font-weight: 700;">Aportes Totales</div>
+          <div id="save-contribs" style="font-size:1.5rem; font-weight: 800; color: var(--info);">—</div>
+          <i class="fa-solid fa-piggy-bank" style="position: absolute; right: 1.5rem; top: 1.5rem; font-size: 1.5rem; opacity: 0.1;"></i>
         </div>
       </div>
 
-      <div class="card" style="margin-top:8px;">
-        <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
-          <div style="flex:1;min-width:220px;">
-            <div class="small">Establecer / actualizar meta</div>
-            <div style="display:flex;gap:8px;align-items:center;margin-top:6px;">
+      <div class="card" style="margin-top:1.5rem;">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:2rem;">
+          <div>
+            <h3 style="font-size: 1rem; margin-bottom: 1rem;"><i class="fa-solid fa-gear" style="color: var(--accent);"></i> Configuración de Meta</h3>
+            <div style="display:flex;gap:8px;align-items:center;">
               <input class="input" id="input-goal" type="number" placeholder="Meta ($)" style="flex:1;">
-              <button class="btn btn-small" id="btn-set-goal">Guardar</button>
-              <button class="btn btn-small btn-outline" id="btn-clear-goal">Borrar</button>
+              <button class="btn btn-small" id="btn-set-goal">Establecer</button>
+              <button class="btn btn-small btn-outline" id="btn-clear-goal"><i class="fa-solid fa-trash"></i></button>
             </div>
-          </div>
-          <div style="flex:1;min-width:220px;">
-            <div class="small">Agregar aporte</div>
-            <div style="display:flex;gap:8px;align-items:center;margin-top:6px;">
-              <input class="input" id="input-contribution" type="number" placeholder="Monto ($)" style="flex:1;">
-              <button class="btn btn-small" id="btn-add-contribution">Agregar</button>
-            </div>
-          </div>
-          <div style="flex:1;min-width:220px;">
-            <div class="small">Retirar aporte</div>
-            <div style="display:flex;gap:8px;align-items:center;margin-top:6px;">
-              <input class="input" id="input-withdraw" type="number" placeholder="Monto a retirar ($)" style="flex:1;">
-              <button class="btn btn-small" id="btn-withdraw">Retirar</button>
-            </div>
-            <div class="small" style="margin-top:4px;">Se convertirá en ingreso "Retiro de ahorro".</div>
-          </div>
-          <div style="flex:1;min-width:200px;">
-            <div class="small">Cumplimiento de meta</div>
-            <div style="display:flex;gap:12px;align-items:center;margin-top:6px;">
-              <div class="percent-circle">
-                <div class="percent-text" id="circle-percent-text">0%</div>
+
+            <div style="margin-top: 2rem;">
+              <h3 style="font-size: 1rem; margin-bottom: 1rem;"><i class="fa-solid fa-chart-line" style="color: var(--success);"></i> Progreso</h3>
+              <div style="display:flex;gap:1.5rem;align-items:center;">
+                <div class="percent-circle" style="width: 100px; height: 100px; background: var(--glass); border: 2px solid var(--glass-border);">
+                  <div class="percent-text" id="circle-percent-text" style="font-size: 1.25rem;">0%</div>
+                </div>
+                <div>
+                  <div id="goal-detail" style="font-size:1.1rem; font-weight: 700;">—</div>
+                  <div class="small">recaudado de la meta</div>
+                </div>
               </div>
-              <div>
-                <div id="goal-detail" style="font-size:1rem;">—</div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <div>
+              <h3 style="font-size: 1rem; margin-bottom: 1rem;"><i class="fa-solid fa-plus" style="color: var(--success);"></i> Nuevo Aporte</h3>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <input class="input" id="input-contribution" type="number" placeholder="Monto ($)" style="flex:1;">
+                <button class="btn btn-small" id="btn-add-contribution" style="background: var(--success);">Aportar</button>
+              </div>
+            </div>
+            <div>
+              <h3 style="font-size: 1rem; margin-bottom: 1rem;"><i class="fa-solid fa-minus" style="color: var(--danger);"></i> Retiro de Ahorro</h3>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <input class="input" id="input-withdraw" type="number" placeholder="Monto ($)" style="flex:1;">
+                <button class="btn btn-small btn-outline" id="btn-withdraw">Retirar</button>
+              </div>
+              <div class="small" style="margin-top:0.5rem; font-size: 0.7rem; opacity: 0.7;">
+                <i class="fa-solid fa-info-circle"></i> Los retiros se registrarán como ingresos.
               </div>
             </div>
           </div>
@@ -1004,22 +1252,40 @@ display: none;
 <!-- Bottom nav -->
 <div class="bottom-nav" id="bottom-nav" style="display:none;">
   <div class="nav-item active" data-target="inicio-section" id="nav-inicio">
-    <div>🏠</div>
-    <div>Inicio</div>
+    <i class="fa-solid fa-house"></i>
+    <span>Inicio</span>
   </div>
   <div class="nav-item" data-target="informe-section" id="nav-informe">
-    <div>📊</div>
-    <div>Informe</div>
+    <i class="fa-solid fa-chart-pie"></i>
+    <span>Informe</span>
   </div>
   <div class="nav-item" data-target="ahorro-section" id="nav-ahorro">
-    <div>💰</div>
-    <div>Ahorro</div>
+    <i class="fa-solid fa-piggy-bank"></i>
+    <span>Ahorro</span>
   </div>
   <div class="nav-item" data-target="yo-section" id="nav-yo">
-    <div>👤</div>
-    <div>Yo</div>
+    <i class="fa-solid fa-user"></i>
+    <span>Perfil</span>
   </div>
 </div>
+
+<!-- Floating Action Button -->
+<div id="fab-container" style="position: fixed; bottom: 105px; right: 25px; z-index: 900; display: none;">
+  <button id="fab-main" class="btn" style="width: 60px; height: 60px; border-radius: 20px; box-shadow: 0 12px 24px rgba(139, 92, 246, 0.4); padding: 0;">
+    <i class="fa-solid fa-plus" style="font-size: 1.5rem;"></i>
+  </button>
+  <div id="fab-options" style="position: absolute; bottom: 75px; right: 0; display: none; flex-direction: column; gap: 12px; align-items: flex-end;">
+    <button class="btn btn-small" id="fab-income" style="background: var(--success);">
+      <i class="fa-solid fa-arrow-trend-up"></i> Ingreso
+    </button>
+    <button class="btn btn-small" id="fab-expense" style="background: var(--danger);">
+      <i class="fa-solid fa-arrow-trend-down"></i> Gasto
+    </button>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 2500; display: flex; flex-direction: column; gap: 10px;"></div>
 
 <!-- Modal -->
 <div id="modal" style="position:fixed;inset:0;display:none;background:rgba(15,23,42,.95);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:1rem;z-index:99;">
@@ -1229,6 +1495,12 @@ display: none;
   const promptCancelBtn = document.getElementById("prompt-cancel");
   const promptRegisterBtn = document.getElementById("prompt-register");
 
+  const fabContainer = document.getElementById("fab-container");
+  const fabMain = document.getElementById("fab-main");
+  const fabOptions = document.getElementById("fab-options");
+  const fabIncome = document.getElementById("fab-income");
+  const fabExpense = document.getElementById("fab-expense");
+
 
   let currentUid = null;
   let isGuestUser = false; // Nuevo estado para identificar usuario invitado
@@ -1249,6 +1521,52 @@ display: none;
   let chartCategoryExpense = null;
   let chartReportIncomeVsExpense = null;
   let chartReportCategoryExpense = null;
+
+  // Toast System
+  const showToast = (message, type = "info") => {
+    const container = document.getElementById("toast-container");
+    const toast = document.createElement("div");
+    toast.className = `card toast ${type}`;
+    toast.style.padding = "12px 20px";
+    toast.style.flexDirection = "row";
+    toast.style.alignItems = "center";
+    toast.style.gap = "12px";
+    toast.style.minWidth = "280px";
+    toast.style.boxShadow = "0 10px 25px rgba(0,0,0,0.3)";
+    toast.style.borderLeft = `4px solid var(--${type === 'error' ? 'danger' : type === 'success' ? 'success' : 'accent'})`;
+    toast.style.animation = "slideIn 0.3s ease-out forwards";
+
+    let icon = "fa-circle-info";
+    if (type === "success") icon = "fa-circle-check";
+    if (type === "error") icon = "fa-circle-exclamation";
+    if (type === "warning") icon = "fa-triangle-exclamation";
+
+    toast.innerHTML = `
+      <i class="fa-solid ${icon}" style="color: var(--${type === 'error' ? 'danger' : type === 'success' ? 'success' : 'accent'}); font-size: 1.25rem;"></i>
+      <div style="flex: 1; font-size: 0.9rem; font-weight: 500;">${message}</div>
+    `;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.animation = "slideOut 0.3s ease-in forwards";
+      setTimeout(() => toast.remove(), 300);
+    }, 4000);
+  };
+
+  // Add keyframe animations for toast
+  const styleSheet = document.createElement("style");
+  styleSheet.textContent = `
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(100%); opacity: 0; }
+    }
+  `;
+  document.head.appendChild(styleSheet);
 
   const readyFlags = {
     transactions: false,
@@ -1389,6 +1707,7 @@ display: none;
       authScreen.style.display="none";
       appEl.style.display="block";
       bottomNav.style.display = "flex";
+      fabContainer.style.display = "block";
       Object.keys(readyFlags).forEach(k=> readyFlags[k]=false);
       loaderOverlay.style.display="flex";
       updateLoader();
@@ -1400,6 +1719,7 @@ display: none;
         btnRegisterNow.style.display = "inline-flex";
         profileName.textContent = "Invitado"; // Mostrar "Invitado" para usuarios anónimos
         profileEmail.textContent = "No registrado";
+        document.getElementById("user-display-name").textContent = "Invitado";
       } else {
         btnLogout.style.display = "inline-flex";
         btnRegisterNow.style.display = "none";
@@ -1423,7 +1743,30 @@ display: none;
       appEl.style.display="none";
       authScreen.style.display="flex";
       bottomNav.style.display = "none";
+      fabContainer.style.display = "none";
     }
+  });
+
+  // FAB Logic
+  fabMain.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isVisible = fabOptions.style.display === "flex";
+    fabOptions.style.display = isVisible ? "none" : "flex";
+    fabMain.style.transform = isVisible ? "rotate(0)" : "rotate(45deg)";
+    fabMain.style.transition = "transform 0.3s ease";
+  });
+
+  document.addEventListener("click", () => {
+    fabOptions.style.display = "none";
+    fabMain.style.transform = "rotate(0)";
+  });
+
+  fabIncome.addEventListener("click", () => {
+    btnAddIncomeMain.click();
+  });
+
+  fabExpense.addEventListener("click", () => {
+    btnAddExpenseMain.click();
   });
 
   function subscribeAll(uid) {
@@ -1565,6 +1908,7 @@ display: none;
       profileEmail.textContent = data.email || "";
       if (data.name) {
         profileName.textContent = data.name;
+        document.getElementById("user-display-name").textContent = data.name;
         profileName.style.opacity = "1";
       } else {
         profileName.textContent = "(sin nombre)";
@@ -1621,11 +1965,15 @@ display: none;
     if (incomes > 0) {
       const expensePct = ((expenses / incomes) * 100).toFixed(1);
       expensePercentage.textContent = `(${expensePct}%)`;
+      expensePercentage.style.display = "inline-block";
       const availablePct = ((availableMoney / incomes) * 100).toFixed(1);
       availablePercentage.textContent = `(${availablePct}%)`;
+      availablePercentage.style.display = "inline-block";
     } else {
       expensePercentage.textContent = "";
+      expensePercentage.style.display = "none";
       availablePercentage.textContent = "";
+      availablePercentage.style.display = "none";
     }
 
     // Check expense limit
@@ -1734,6 +2082,17 @@ display: none;
   }
 
   function renderInicioTable() {
+    if (state.transactions.length === 0) {
+      txTableBodyInicio.innerHTML = `
+        <tr>
+          <td colspan="6" style="text-align: center; padding: 3rem; color: var(--muted);">
+            <i class="fa-solid fa-receipt" style="font-size: 3rem; opacity: 0.2; margin-bottom: 1rem; display: block;"></i>
+            No hay transacciones recientes.
+          </td>
+        </tr>
+      `;
+      return;
+    }
     txTableBodyInicio.innerHTML = "";
     const sorted = state.transactions.slice().sort((a,b)=> new Date(b.date) - new Date(a.date));
     sorted.forEach(t => {
@@ -1771,16 +2130,19 @@ display: none;
             showRegistrationPrompt("Para eliminar transacciones, por favor regístrate.");
             return;
           }
-          // Reemplazar confirm con showAlert
           showConfirmation("Eliminar transacción", "¿Estás seguro de que quieres eliminar esta transacción?", async () => {
-            if (tx.category === "Ahorro" && tx.type === "expense" && tx.linkedSavingsId) {
-              await window.FirebaseHelpers.deleteSavingsContribution(currentUid, tx.linkedSavingsId);
-            } else if (tx.category === "Retiro de ahorro" && tx.type === "income" && tx.linkedSavingsId) {
-              await window.FirebaseHelpers.deleteSavingsWithdrawal(currentUid, tx.linkedSavingsId);
-            } else {
-              await window.FirebaseHelpers.deleteTransaction(currentUid, id);
+            try {
+              if (tx.category === "Ahorro" && tx.type === "expense" && tx.linkedSavingsId) {
+                await window.FirebaseHelpers.deleteSavingsContribution(currentUid, tx.linkedSavingsId);
+              } else if (tx.category === "Retiro de ahorro" && tx.type === "income" && tx.linkedSavingsId) {
+                await window.FirebaseHelpers.deleteSavingsWithdrawal(currentUid, tx.linkedSavingsId);
+              } else {
+                await window.FirebaseHelpers.deleteTransaction(currentUid, id);
+              }
+              showToast("Transacción eliminada", "success");
+            } catch (e) {
+              showToast("Error al eliminar", "error");
             }
-            showAlert("Éxito", "Transacción eliminada exitosamente.");
           });
         } else if (act === "edit") {
           if (!currentUid || isGuestUser) {
@@ -1789,8 +2151,12 @@ display: none;
           }
           if (!tx) return;
           openTransactionModal(tx.type === "income" ? "Editar ingreso" : "Editar gasto", tx, async (payload) => {
-            await window.FirebaseHelpers.updateTransaction(currentUid, id, payload);
-            showAlert("Éxito", "Transacción actualizada exitosamente.");
+            try {
+              await window.FirebaseHelpers.updateTransaction(currentUid, id, payload);
+              showToast("Transacción actualizada", "success");
+            } catch (e) {
+              showToast("Error al actualizar", "error");
+            }
           });
         }
       });
@@ -1800,6 +2166,14 @@ display: none;
   function drawCharts() {
     const { incomes, expenses, contributions } = aggregate();
 
+    // Global Chart.js defaults for modern look
+    Chart.defaults.color = '#94a3b8';
+    Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+    Chart.defaults.plugins.tooltip.backgroundColor = '#1e293b';
+    Chart.defaults.plugins.tooltip.padding = 12;
+    Chart.defaults.plugins.tooltip.cornerRadius = 10;
+    Chart.defaults.plugins.tooltip.titleFont = { size: 14, weight: '700' };
+
     if (chartIncomeVsExpense) chartIncomeVsExpense.destroy();
     chartIncomeVsExpense = new Chart(ctxIncomeVsExpense, {
       type: "doughnut",
@@ -1807,19 +2181,21 @@ display: none;
         labels: ["Ingresos", "Gastos"],
         datasets: [{
           data: [incomes, expenses],
-          backgroundColor: ["#10b981","#f87171"],
-          hoverOffset:6,
-          borderWidth:0
+          backgroundColor: ["#10b981", "#ef4444"],
+          hoverOffset: 15,
+          borderWidth: 0,
+          borderRadius: 2
         }]
       },
       options: {
         plugins: {
-          legend:{position:"bottom", labels:{boxWidth:12}},
-          tooltip:{callbacks:{label: c => `${c.label}: ${formatMoney(c.parsed)}`}}
+          legend: { position: "bottom", labels: { usePointStyle: true, padding: 20 } },
+          tooltip: { callbacks: { label: c => ` ${c.label}: ${formatMoney(c.parsed)}` } }
         },
-        cutout: "60%",
-        responsive:true,
-        maintainAspectRatio:false
+        cutout: "75%",
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { animateScale: true, animateRotate: true }
       }
     });
 
@@ -1829,48 +2205,59 @@ display: none;
     chartGoalProgress = new Chart(ctxGoalProgress, {
       type: "bar",
       data: {
-        labels: ["Meta","Aportado"],
+        labels: ["Meta", "Aportado"],
         datasets: [{
           data: [goalAmount, saved],
-          backgroundColor: ["rgba(99,102,241,.5)","rgba(16,185,129,.7)"],
-          borderRadius:6,
-          barThickness:30
+          backgroundColor: ["rgba(139, 92, 246, 0.2)", "rgba(16, 185, 129, 0.8)"],
+          borderColor: ["#8b5cf6", "#10b981"],
+          borderWidth: 2,
+          borderRadius: 12,
+          barThickness: 40
         }]
       },
       options: {
-        plugins:{legend:{display:false}},
-        scales:{
-          y:{beginAtZero:true, ticks:{callback: v=>"$"+Number(v).toLocaleString()}}
+        plugins: { legend: { display: false } },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            ticks: { callback: v => "$" + Number(v).toLocaleString() }
+          },
+          x: { grid: { display: false } }
         },
-        responsive:true,
-        maintainAspectRatio:false
+        responsive: true,
+        maintainAspectRatio: false
       }
     });
 
     const expenseByCat = {};
-    state.transactions.filter(t=>t.type==="expense").forEach(t=>{
-      expenseByCat[t.category] = (expenseByCat[t.category]||0) + Number(t.amount);
+    state.transactions.filter(t => t.type === "expense").forEach(t => {
+      expenseByCat[t.category] = (expenseByCat[t.category] || 0) + Number(t.amount);
     });
     const labels = Object.keys(expenseByCat);
-    const dataVals = labels.map(l=>expenseByCat[l]);
+    const dataVals = labels.map(l => expenseByCat[l]);
     if (chartCategoryExpense) chartCategoryExpense.destroy();
     chartCategoryExpense = new Chart(ctxCategoryExpense, {
       type: "pie",
       data: {
         labels,
-        datasets:[{
+        datasets: [{
           data: dataVals,
-          backgroundColor: labels.map((_,i)=>`hsl(${(i*60)%360} 70% 60%)`),
-          borderWidth:0
+          backgroundColor: [
+            '#6366f1', '#ec4899', '#f59e0b', '#10b981', '#3b82f6',
+            '#ef4444', '#8b5cf6', '#06b6d4', '#84cc16'
+          ],
+          borderWidth: 2,
+          borderColor: '#161c2d'
         }]
       },
-      options:{
-        plugins:{
-          legend:{position:"bottom", labels:{boxWidth:12}},
-          tooltip:{callbacks:{label: c => `${c.label}: ${formatMoney(c.parsed)}`}}
+      options: {
+        plugins: {
+          legend: { position: "bottom", labels: { usePointStyle: true, padding: 15, boxWidth: 8 } },
+          tooltip: { callbacks: { label: c => ` ${c.label}: ${formatMoney(c.parsed)}` } }
         },
-        responsive:true,
-        maintainAspectRatio:false
+        responsive: true,
+        maintainAspectRatio: false
       }
     });
   }
@@ -1882,20 +2269,19 @@ display: none;
       return;
     }
     const val = parseFloat(inputGoal.value);
-    if (isNaN(val) || val < 0) { showAlert("Error", "Meta inválida"); return; }
+    if (isNaN(val) || val < 0) { showToast("Meta inválida", "error"); return; }
     await window.FirebaseHelpers.setGoal(currentUid, val);
     inputGoal.value="";
-    showAlert("Éxito", "Meta guardada exitosamente.");
+    showToast("Meta guardada", "success");
   });
   btnClearGoal.addEventListener("click", async () => {
     if (!currentUid || isGuestUser) {
       showRegistrationPrompt("Para borrar una meta de ahorro, por favor regístrate.");
       return;
     }
-    // Reemplazar confirm con showConfirmation
     showConfirmation("Borrar meta", "¿Estás seguro de que quieres borrar tu meta de ahorro?", async () => {
       await window.FirebaseHelpers.clearGoal(currentUid);
-      showAlert("Éxito", "Meta borrada exitosamente.");
+      showToast("Meta borrada", "success");
     });
   });
   btnAddContribution.addEventListener("click", async () => {
@@ -1904,10 +2290,10 @@ display: none;
       return;
     }
     const val = parseFloat(inputContribution.value);
-    if (isNaN(val) || val <=0){ showAlert("Error", "Monto inválido"); return; }
+    if (isNaN(val) || val <=0){ showToast("Monto inválido", "error"); return; }
     await window.FirebaseHelpers.addSavingsContribution(currentUid, val);
     inputContribution.value="";
-    showAlert("Éxito", "Aporte agregado exitosamente.");
+    showToast("Aporte agregado", "success");
   });
   btnWithdraw.addEventListener("click", async () => {
     if (!currentUid || isGuestUser) {
@@ -1915,12 +2301,12 @@ display: none;
       return;
     }
     const val = parseFloat(inputWithdraw.value);
-    if (isNaN(val) || val <=0){ showAlert("Error", "Monto inválido"); return; }
+    if (isNaN(val) || val <=0){ showToast("Monto inválido", "error"); return; }
     const { contributions } = aggregate();
-    if (val > contributions) { showAlert("Error", "No tienes suficiente ahorro neto."); return; }
+    if (val > contributions) { showToast("No tienes suficiente ahorro", "warning"); return; }
     await window.FirebaseHelpers.addSavingsWithdrawal(currentUid, val);
     inputWithdraw.value="";
-    showAlert("Éxito", "Retiro agregado exitosamente.");
+    showToast("Retiro realizado", "success");
   });
 
   function attachContributionActions() {
