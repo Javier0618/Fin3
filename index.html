@@ -449,6 +449,115 @@ display: none;
     border-radius: 6px;
   }
 
+  .summary-card-new {
+    padding: 1.25rem;
+    border-radius: 24px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid var(--glass-border);
+    background: var(--card);
+    box-shadow: var(--shadow);
+  }
+  .summary-card-new .label {
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    opacity: 0.8;
+  }
+  .summary-card-new .value {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.02em;
+  }
+  .summary-card-new .sub-value {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 4px;
+    opacity: 0.7;
+  }
+  .summary-card-new .icon-bg {
+    position: absolute;
+    right: -12px;
+    bottom: -12px;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .summary-card-new .icon-bg i {
+    font-size: 1.25rem;
+    margin-right: 12px;
+    margin-bottom: 12px;
+  }
+
+  .summary-card-new.income { background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.2); }
+  .summary-card-new.income .label { color: #10b981; }
+  .summary-card-new.income .icon-bg { background: rgba(16, 185, 129, 0.15); }
+  .summary-card-new.income .icon-bg i { color: #10b981; }
+
+  .summary-card-new.expense { background: rgba(239, 68, 68, 0.08); border-color: rgba(239, 68, 68, 0.2); }
+  .summary-card-new.expense .label { color: #ef4444; }
+  .summary-card-new.expense .icon-bg { background: rgba(239, 68, 68, 0.15); }
+  .summary-card-new.expense .icon-bg i { color: #ef4444; }
+
+  .summary-card-new.available { background: rgba(59, 130, 246, 0.08); border-color: rgba(59, 130, 246, 0.2); }
+  .summary-card-new.available .label { color: #3b82f6; }
+  .summary-card-new.available .icon-bg { background: rgba(59, 130, 246, 0.15); }
+  .summary-card-new.available .icon-bg i { color: #3b82f6; }
+
+  .summary-card-new.savings { background: rgba(139, 92, 246, 0.08); border-color: rgba(139, 92, 246, 0.2); }
+  .summary-card-new.savings .label { color: #a78bfa; }
+  .summary-card-new.savings .icon-bg { background: rgba(139, 92, 246, 0.15); }
+  .summary-card-new.savings .icon-bg i { color: #a78bfa; }
+
+  .btn-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -5px rgba(0, 0, 0, 0.2);
+    filter: brightness(1.2);
+  }
+  .btn-action:active { transform: translateY(0); }
+
+  .movement-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 18px;
+    border: 1px solid var(--glass-border);
+    transition: all 0.2s ease;
+  }
+  .movement-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateX(4px);
+  }
+  .movement-item .item-actions {
+    display: flex;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .movement-item:hover .item-actions {
+    opacity: 1;
+  }
+  .date-group-header {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin: 1.5rem 0 0.75rem 0.5rem;
+  }
+
   .nav-top{
     display: flex;
     justify-content: space-between;
@@ -486,13 +595,17 @@ display: none;
     justify-content: center;
     gap: 4px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    height: 100%;
+    transition: all 0.2s ease;
+    height: 54px;
+    border-radius: 16px;
   }
-  .nav-item i { font-size: 1.25rem; transition: transform 0.3s ease; }
-  .nav-item span { font-size: 0.7rem; font-weight: 600; }
-  .nav-item.active{color: var(--accent);}
-  .nav-item.active i { transform: translateY(-4px); color: var(--accent); }
+  .nav-item i { font-size: 1.1rem; transition: transform 0.2s ease; }
+  .nav-item span { font-size: 0.65rem; font-weight: 700; }
+  .nav-item.active{
+    color: #fff;
+    background: rgba(59, 130, 246, 0.2);
+  }
+  .nav-item.active i { color: #3b82f6; }
 
   .section{display:none; animation: fadeIn 0.4s ease-out;}
   .section.active{display:block;}
@@ -906,12 +1019,13 @@ display: none;
 <!-- App -->
 <div id="app" class="container" style="display:none; padding-bottom:100px;">
   <!-- Header -->
-  <header class="nav-top" style="padding: 1.25rem 0;">
+  <header class="nav-top" style="padding: 1rem 0;">
     <div style="display: flex; align-items: center; gap: 12px;">
-      <h2 style="font-size: 1.75rem; font-weight: 800; color: #3b82f6; letter-spacing: -0.04em;">Fin3</h2>
+      <h2 style="font-size: 1.75rem; font-weight: 800; letter-spacing: -0.04em;">
+        <span style="color: #3b82f6;">Fin</span><span style="color: #10b981;">3</span>
+      </h2>
     </div>
     <div class="user-box">
-      <div id="user-display-name" style="margin-right: 10px; font-weight: 700; font-size: 0.9rem; color: var(--text);" class="hide-mobile"></div>
       <button class="btn btn-small" id="btn-logout" style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); width: 40px; height: 40px; padding: 0; border-radius: 10px; color: var(--muted);">
         <i class="fa-solid fa-right-from-bracket"></i>
       </button>
@@ -923,65 +1037,57 @@ display: none;
 
   <!-- Inicio -->
   <div id="inicio-section" class="section active">
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
-        <div>
-          <div style="font-size:1.25rem;font-weight:600;">Resumen</div>
-          <div class="small">Tus ingresos y gastos recientes</div>
-        </div>
-        <!-- Nuevo div para la fecha en Inicio -->
-        <div id="inicio-date-display" style="text-align: right;">
-          <div id="inicio-current-year" style="font-size: 1.5rem; font-weight: 600;"></div>
-          <div id="inicio-current-month-day" class="small"></div>
-        </div>
+    <!-- Greeting Section -->
+    <div id="greeting-section" style="margin-bottom: 1.5rem;">
+      <h1 id="greeting-text" style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.15rem; color: var(--text);">Hola, <span id="user-name-greeting">Usuario</span> 👋</h1>
+      <div id="current-date-full" class="small" style="text-transform: capitalize; font-size: 0.9rem; opacity: 0.6;"></div>
+    </div>
+
+    <div class="summary-cards-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 1.5rem;">
+      <!-- INGRESOS -->
+      <div class="summary-card-new income">
+        <div class="label">Ingresos</div>
+        <div id="inicio-total-income" class="value">$0.00</div>
+        <div class="icon-bg"><i class="fa-solid fa-chart-line"></i></div>
       </div>
-      <div class="big-total" style="display:flex;gap:16px;flex-wrap:wrap;">
-        <div class="total-box income">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span class="small" style="color: var(--success); font-weight: 700;">TOTAL INGRESOS</span>
-            <i class="fa-solid fa-circle-up" style="color: var(--success); opacity: 0.5;"></i>
-          </div>
-          <div id="inicio-total-income" class="total-value" style="color: var(--success);">$0.00</div>
-        </div>
-        <div class="total-box expense">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span class="small" style="color: var(--danger); font-weight: 700;">TOTAL GASTOS</span>
-            <i class="fa-solid fa-circle-down" style="color: var(--danger); opacity: 0.5;"></i>
-          </div>
-          <div class="total-value total-value-with-percentage" style="color: var(--danger);">
-            <span id="inicio-total-expense">$0.00</span>
-            <span id="expense-percentage" class="percentage-text"></span>
-          </div>
-        </div>
-        <div class="total-box">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span class="small" style="color: var(--accent); font-weight: 700;">DISPONIBLE</span>
-            <i class="fa-solid fa-scale-balanced" style="color: var(--accent); opacity: 0.5;"></i>
-          </div>
-          <div class="total-value total-value-with-percentage" style="color: var(--text);">
-            <span id="inicio-available-money">$0.00</span>
-            <span id="available-percentage" class="percentage-text"></span>
-          </div>
-        </div>
+
+      <!-- GASTOS -->
+      <div class="summary-card-new expense">
+        <div class="label">Gastos</div>
+        <div id="inicio-total-expense" class="value">$0.00</div>
+        <div id="expense-percentage" class="sub-value">0% de ingresos</div>
+        <div class="icon-bg"><i class="fa-solid fa-chart-area"></i></div>
       </div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;margin:12px 0;">
-        <button class="btn btn-small" id="btn-add-income-main">+ Ingreso</button>
-        <button class="btn btn-small" id="btn-add-expense-main">+ Gasto</button>
+
+      <!-- DISPONIBLE -->
+      <div class="summary-card-new available">
+        <div class="label">Disponible</div>
+        <div id="inicio-available-money" class="value">$0.00</div>
+        <div id="available-percentage" class="sub-value">0% de ingresos</div>
+        <div class="icon-bg"><i class="fa-solid fa-wallet"></i></div>
       </div>
-      <div style="overflow:auto;">
-        <table>
-          <thead>
-            <tr>
-              <th>Tipo</th>
-              <th>Monto</th>
-              <th>Categoría</th>
-              <th>Descripción</th>
-              <th>Fecha</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="tx-table-body-inicio"></tbody>
-        </table>
+
+      <!-- AHORRO NETO -->
+      <div class="summary-card-new savings">
+        <div class="label">Ahorro Neto</div>
+        <div id="inicio-savings-net" class="value">$0.00</div>
+        <div class="icon-bg"><i class="fa-solid fa-piggy-bank"></i></div>
+      </div>
+    </div>
+
+    <div class="quick-actions" style="display: flex; gap: 12px; margin-bottom: 2rem;">
+      <button class="btn-action income" id="btn-add-income-main" style="flex: 1; background: rgba(16, 185, 129, 0.05); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); padding: 0.8rem; border-radius: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;">
+        <i class="fa-solid fa-plus" style="font-size: 0.8rem;"></i> Ingreso
+      </button>
+      <button class="btn-action expense" id="btn-add-expense-main" style="flex: 1; background: rgba(239, 68, 68, 0.05); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.8rem; border-radius: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;">
+        <i class="fa-solid fa-plus" style="font-size: 0.8rem;"></i> Gasto
+      </button>
+    </div>
+
+    <div id="recent-movements-section">
+      <div style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem; color: var(--text);">Movimientos recientes</div>
+      <div id="recent-movements-list" style="display: flex; flex-direction: column; gap: 12px;">
+        <!-- Transactions will be rendered here as a list -->
       </div>
     </div>
   </div>
@@ -1441,13 +1547,12 @@ display: none;
   const authMsg = document.getElementById("auth-msg");
 
   const inicioTotalIncome = document.getElementById("inicio-total-income");
-  // MODIFICACIÓN: Obtener el span del valor y el span del porcentaje por separado
   const inicioTotalExpenseValue = document.getElementById("inicio-total-expense");
   const expensePercentage = document.getElementById("expense-percentage");
   const inicioAvailableMoneyValue = document.getElementById("inicio-available-money");
   const availablePercentage = document.getElementById("available-percentage");
+  const inicioSavingsNet = document.getElementById("inicio-savings-net");
 
-  const txTableBodyInicio = document.getElementById("tx-table-body-inicio");
   const btnAddIncomeMain = document.getElementById("btn-add-income-main");
   const btnAddExpenseMain = document.getElementById("btn-add-expense-main");
 
@@ -1502,9 +1607,6 @@ display: none;
   const modalSave = document.getElementById("modal-save");
   const modalCancel = document.getElementById("modal-cancel");
   const closeModalBtn = document.getElementById("close-modal");
-
-  const inicioCurrentYearDisplay = document.getElementById("inicio-current-year");
-  const inicioCurrentMonthDayDisplay = document.getElementById("inicio-current-month-day");
 
   const ahorroCurrentYearDisplay = document.getElementById("ahorro-current-year");
   const ahorroCurrentMonthDayDisplay = document.getElementById("ahorro-current-month-day");
@@ -1939,11 +2041,14 @@ display: none;
       const avatarEl = document.getElementById("profile-avatar");
       if (data.name) {
         profileName.textContent = data.name;
-        document.getElementById("user-display-name").textContent = data.name;
+        const greetingName = document.getElementById("user-name-greeting");
+        if (greetingName) greetingName.textContent = data.name;
         if (avatarEl) avatarEl.textContent = data.name.charAt(0).toUpperCase();
         profileName.style.opacity = "1";
       } else {
         profileName.textContent = "(sin nombre)";
+        const greetingName = document.getElementById("user-name-greeting");
+        if (greetingName) greetingName.textContent = "Usuario";
         if (avatarEl) avatarEl.textContent = "?";
         profileName.style.opacity = "0.7";
       }
@@ -1975,9 +2080,14 @@ display: none;
     const year = now.getFullYear();
     const monthDay = now.toLocaleDateString("es-CO", { month: 'long', day: 'numeric' });
 
-    if (inicioCurrentYearDisplay && inicioCurrentMonthDayDisplay) {
-      inicioCurrentYearDisplay.textContent = year;
-      inicioCurrentMonthDayDisplay.textContent = monthDay;
+    // New full date display for Inicio
+    const fullDateDisplay = document.getElementById("current-date-full");
+    if (fullDateDisplay) {
+      const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+      let formattedDate = now.toLocaleDateString("es-CO", options);
+      // Capitalize each word for the date
+      formattedDate = formattedDate.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      fullDateDisplay.textContent = formattedDate;
     }
 
     if (ahorroCurrentYearDisplay && ahorroCurrentMonthDayDisplay) {
@@ -1990,23 +2100,21 @@ display: none;
     const { incomes, expenses, contributions, rawContribs, availableMoney } = aggregate();
 
     inicioTotalIncome.textContent = formatMoney(incomes);
-    // MODIFICACIÓN: Actualizar el textContent de los spans de valor y porcentaje
     inicioTotalExpenseValue.textContent = formatMoney(expenses);
     inicioAvailableMoneyValue.textContent = formatMoney(availableMoney);
+    if (inicioSavingsNet) inicioSavingsNet.textContent = formatMoney(contributions);
 
     // Update percentages
     if (incomes > 0) {
       const expensePct = ((expenses / incomes) * 100).toFixed(1);
-      expensePercentage.textContent = `(${expensePct}%)`;
-      expensePercentage.style.display = "inline-block";
+      expensePercentage.textContent = `${expensePct}% de ingresos`;
+      expensePercentage.style.display = "block";
       const availablePct = ((availableMoney / incomes) * 100).toFixed(1);
-      availablePercentage.textContent = `(${availablePct}%)`;
-      availablePercentage.style.display = "inline-block";
+      availablePercentage.textContent = `${availablePct}% de ingresos`;
+      availablePercentage.style.display = "block";
     } else {
-      expensePercentage.textContent = "";
-      expensePercentage.style.display = "none";
-      availablePercentage.textContent = "";
-      availablePercentage.style.display = "none";
+      expensePercentage.textContent = "0% de ingresos";
+      availablePercentage.textContent = "0% de ingresos";
     }
 
     // Check expense limit
@@ -2115,44 +2223,81 @@ display: none;
   }
 
   function renderInicioTable() {
+    const listContainer = document.getElementById("recent-movements-list");
+    if (!listContainer) return;
+
     if (state.transactions.length === 0) {
-      txTableBodyInicio.innerHTML = `
-        <tr>
-          <td colspan="6" style="text-align: center; padding: 3rem; color: var(--muted);">
-            <i class="fa-solid fa-receipt" style="font-size: 3rem; opacity: 0.2; margin-bottom: 1rem; display: block;"></i>
-            No hay transacciones recientes.
-          </td>
-        </tr>
+      listContainer.innerHTML = `
+        <div style="text-align: center; padding: 3rem; color: var(--muted);">
+          <i class="fa-solid fa-receipt" style="font-size: 3rem; opacity: 0.2; margin-bottom: 1rem; display: block;"></i>
+          No hay transacciones recientes.
+        </div>
       `;
       return;
     }
-    txTableBodyInicio.innerHTML = "";
+
+    listContainer.innerHTML = "";
     const sorted = state.transactions.slice().sort((a,b)=> new Date(b.date) - new Date(a.date));
+
+    // Group by date
+    const groups = {};
     sorted.forEach(t => {
-      const tr = document.createElement("tr");
-      const typeBadge = t.type==="income" ? `<span class="pill-small" style="background:#10b981;">Ingreso</span>`
-        : `<span class="pill-small" style="background:#f87171;">Gasto</span>`;
-      let catDisplay = t.category || "-";
-      if (t.category) {
-        const meta = state.incomeCategoriesMeta[t.category] || state.expenseCategoriesMeta[t.category];
-        const icon = meta?.icon || "";
-        catDisplay = `${icon} ${t.category}`;
-      }
-      const descExtra = t.category === "Ahorro" && t.type === "expense" ? `${t.desc} ➡️ Ahorro` : (t.category === "Retiro de ahorro" && t.type === "income" ? `${t.desc} ⬅️ Ahorro` : (t.desc || "-"));
-      tr.innerHTML = `
-        <td>${typeBadge}</td>
-        <td>${formatMoney(t.amount)}</td>
-        <td>${catDisplay}</td>
-        <td>${descExtra}</td>
-        <td>${convertToUTCMinus5(t.date).toLocaleDateString("es-CO")}</td>
-        <td class="table-actions">
-          <button class="btn-small" data-action="edit" data-id="${t.id}">Editar</button>
-          <button class="btn-small" data-action="delete" data-id="${t.id}">Borrar</button>
-        </td>
-      `;
-      txTableBodyInicio.appendChild(tr);
+      const dateKey = convertToUTCMinus5(t.date).toLocaleDateString("es-CO", { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      if (!groups[dateKey]) groups[dateKey] = [];
+      groups[dateKey].push(t);
     });
-    txTableBodyInicio.querySelectorAll("[data-action]").forEach(btn => {
+
+    for (const dateLabel in groups) {
+      const header = document.createElement("div");
+      header.className = "date-group-header";
+      header.textContent = dateLabel.toUpperCase();
+      listContainer.appendChild(header);
+
+      groups[dateLabel].forEach(t => {
+        const item = document.createElement("div");
+        item.className = "movement-item";
+
+        const isExpense = t.type === "expense";
+        const meta = isExpense ? state.expenseCategoriesMeta[t.category] : state.incomeCategoriesMeta[t.category];
+        const icon = meta?.icon || (isExpense ? "💸" : "💰");
+
+        const amountFormatted = (isExpense ? "-" : "+") + formatMoney(t.amount);
+        const amountColor = isExpense ? "#ef4444" : "#10b981";
+
+        const descText = t.category === "Ahorro" && isExpense ? "Aporte a Ahorro" : (t.category === "Retiro de ahorro" && !isExpense ? "Retiro de Ahorro" : (t.desc || "Sin descripción"));
+
+        item.innerHTML = `
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+              ${icon}
+            </div>
+            <div>
+              <div style="font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
+                ${t.category}
+                <i class="fa-solid fa-arrow-trend-${isExpense ? 'down' : 'up'}" style="font-size: 0.6rem; opacity: 0.5;"></i>
+              </div>
+              <div class="small" style="opacity: 0.5; font-size: 0.75rem;">${descText}</div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 16px;">
+            <div style="font-weight: 800; font-size: 0.95rem; color: ${amountColor};">
+              ${amountFormatted}
+            </div>
+            <div class="item-actions">
+              <button class="btn-small" style="background: rgba(255,255,255,0.05); width: 32px; height: 32px; padding: 0; border-radius: 8px;" data-action="edit" data-id="${t.id}">
+                <i class="fa-solid fa-pen" style="font-size: 0.75rem;"></i>
+              </button>
+              <button class="btn-small" style="background: rgba(255,255,255,0.05); width: 32px; height: 32px; padding: 0; border-radius: 8px;" data-action="delete" data-id="${t.id}">
+                <i class="fa-solid fa-trash" style="font-size: 0.75rem;"></i>
+              </button>
+            </div>
+          </div>
+        `;
+        listContainer.appendChild(item);
+      });
+    }
+
+    listContainer.querySelectorAll("[data-action]").forEach(btn => {
       btn.addEventListener("click", async () => {
         const act = btn.getAttribute("data-action");
         const id = btn.getAttribute("data-id");
