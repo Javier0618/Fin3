@@ -1666,7 +1666,7 @@ display: none;
 <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 2500; display: flex; flex-direction: column; gap: 10px;"></div>
 
 <!-- Modal -->
-<div id="modal" style="position:fixed;inset:0;display:none;background:rgba(11, 15, 26, 0.85);backdrop-filter:blur(15px);align-items:center;justify-content:center;padding:1rem;z-index:99;">
+<div id="modal" style="position:fixed;inset:0;display:none;background:rgba(11, 15, 26, 0.85);backdrop-filter:blur(15px);align-items:center;justify-content:center;padding:1rem;z-index:1100;">
   <div class="card" style="max-width:480px;width:100%;position:relative;border-radius:28px;padding:2rem;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
       <div id="modal-title" style="font-size:1.25rem;font-weight:800;letter-spacing:-0.02em;">Agregar</div>
@@ -1727,9 +1727,17 @@ display: none;
     return "$" + num.toLocaleString("es-CO", {minimumFractionDigits:2, maximumFractionDigits:2});
   };
 
+  // Helper for Firestore timestamps or strings
+  const safeDate = (d) => {
+    if (!d) return new Date();
+    if (typeof d.toDate === 'function') return d.toDate();
+    const date = new Date(d);
+    return isNaN(date.getTime()) ? new Date() : date;
+  };
+
   // Function to convert UTC date string to UTC-5 date object
   const convertToUTCMinus5 = (dateString) => {
-    const date = new Date(dateString);
+    const date = safeDate(dateString);
     // Get the UTC time in milliseconds
     const utcTime = date.getTime() + (date.getTimezoneOffset() * 60 * 1000);
     // Create a new Date object for UTC-5 (5 hours behind UTC)
@@ -1808,9 +1816,6 @@ display: none;
   const ctxGoalProgress = document.getElementById("chart-goal-progress");
   const ctxCategoryExpense = document.getElementById("chart-category-expense");
   const goalPercent = document.getElementById("goal-percent");
-  const circlePercentText = document.getElementById("circle-percent-text");
-  const goalDetail = document.getElementById("goal-detail");
-
   const saveGoalDisplay = document.getElementById("save-goal-display");
   const saveNet = document.getElementById("save-net");
   const saveContribs = document.getElementById("save-contribs");
@@ -2099,7 +2104,6 @@ display: none;
         btnRegisterNow.style.display = "inline-flex";
         profileName.textContent = "Invitado"; // Mostrar "Invitado" para usuarios anónimos
         profileEmail.textContent = "No registrado";
-        document.getElementById("user-display-name").textContent = "Invitado";
       } else {
         btnLogout.style.display = "inline-flex";
         btnRegisterNow.style.display = "none";
@@ -2369,11 +2373,12 @@ display: none;
       const currentMonthExpenses = state.transactions.filter(t => {
         const txDate = convertToUTCMinus5(t.date);
         const now = convertToUTCMinus5(new Date().toISOString());
+        if (isNaN(txDate.getTime())) return false;
         return t.type === 'expense' && txDate.getMonth() === now.getMonth() && txDate.getFullYear() === now.getFullYear();
       }).reduce((sum, t) => sum + Number(t.amount), 0);
 
       if (currentMonthExpenses > state.expenseLimit.amount) {
-        inicioAvailableMoneyValue.classList.add('limit-exceeded'); // Aplicar clase al span del valor
+        if (inicioAvailableMoneyValue) inicioAvailableMoneyValue.classList.add('limit-exceeded'); // Aplicar clase al span del valor
         if (!document.getElementById('expense-limit-alert')) {
           const alertDiv = document.createElement('div');
           alertDiv.id = 'expense-limit-alert';
@@ -2390,12 +2395,12 @@ display: none;
           }, 5000); // Alert disappears after 5 seconds
         }
       } else {
-        inicioAvailableMoneyValue.classList.remove('limit-exceeded'); // Remover clase del span del valor
+        if (inicioAvailableMoneyValue) inicioAvailableMoneyValue.classList.remove('limit-exceeded'); // Remover clase del span del valor
         const existingAlert = document.getElementById('expense-limit-alert');
         if (existingAlert) existingAlert.remove();
       }
     } else {
-      inicioAvailableMoneyValue.classList.remove('limit-exceeded'); // Remover clase del span del valor
+      if (inicioAvailableMoneyValue) inicioAvailableMoneyValue.classList.remove('limit-exceeded'); // Remover clase del span del valor
       const existingAlert = document.getElementById('expense-limit-alert');
       if (existingAlert) existingAlert.remove();
     }
@@ -2437,19 +2442,25 @@ display: none;
     ratioExpenseIncome.textContent = incomes > 0 ? ((expenses / incomes)*100).toFixed(1) + "%" : "—";
     if (state.goal != null && state.goal > 0) {
       const percent = Math.min(100, Math.max(0, (contributions / state.goal)*100));
-      ratioGoal.textContent = `${percent.toFixed(1)}%`;
-      goalPercent.textContent = `${percent.toFixed(1)}%`;
-      circlePercentText.textContent = `${percent.toFixed(1)}%`;
-      goalDetail.textContent = `${formatMoney(contributions)} de ${formatMoney(state.goal)}`;
+      if (ratioGoal) ratioGoal.textContent = `${percent.toFixed(1)}%`;
+      if (goalPercent) goalPercent.textContent = `${percent.toFixed(1)}%`;
     } else {
-      ratioGoal.textContent = "—";
-      goalPercent.textContent = "0%";
-      circlePercentText.textContent = "0%";
-      goalDetail.textContent = "Meta no establecida";
+      if (ratioGoal) ratioGoal.textContent = "—";
+      if (goalPercent) goalPercent.textContent = "0%";
     }
 
-    renderInicioTable();
-    drawCharts();
+    try {
+      renderInicioTable();
+    } catch (e) {
+      console.error("Error rendering inicio table:", e);
+    }
+
+    try {
+      drawCharts();
+    } catch (e) {
+      console.error("Error drawing charts:", e);
+    }
+
     updateDateDisplays();
   }
 
@@ -3329,10 +3340,19 @@ display: none;
         <div class="icon"><i class="fa-solid fa-plus"></i></div>
         <div class="name">Nueva</div>
       `;
-      addNew.onclick = () => openCreateCategoryModal(currentType, (newName) => {
-        selectedCategory = newName;
-        renderCategoryGrid();
-      });
+      addNew.onclick = () => {
+        const currentState = {
+          type: currentType,
+          amount: amountInput.value,
+          desc: descInput.value,
+          date: dateInput.value,
+          category: selectedCategory
+        };
+        openCreateCategoryModal(currentType, currentState, (newName) => {
+          selectedCategory = newName;
+          renderCategoryGrid();
+        });
+      };
       grid.appendChild(addNew);
     }
 
@@ -3403,16 +3423,11 @@ display: none;
     amountInput.focus();
   }
 
-  function openCreateCategoryModal(type, onCreated) {
+  function openCreateCategoryModal(type, prevState, onCreated) {
     if (!currentUid || isGuestUser) {
       showRegistrationPrompt("Para crear nuevas categorías, por favor regístrate.");
       return;
     }
-
-    // Reuse the modal for sub-creation
-    const prevBody = modalBody.innerHTML;
-    const prevTitle = modalTitle.textContent;
-    const prevSaveLabel = modalSave.textContent;
 
     modalTitle.textContent = "Nueva Categoría";
     modalBody.innerHTML = `
@@ -3428,7 +3443,6 @@ display: none;
     const iconGrid = document.getElementById("icon-selector-grid");
     let selectedIcon = type === "income" ? "💼" : "💸";
 
-    // Flatten emoji library for selection
     const allIcons = Object.values(emojiLibrary).flat();
     allIcons.forEach(emoji => {
       const btn = document.createElement("div");
@@ -3446,6 +3460,27 @@ display: none;
       iconGrid.appendChild(btn);
     });
 
+    const restoreTransactionModal = (newCatName = null) => {
+      const title = type === "income" ? "Agregar ingreso" : "Agregar gasto";
+      const existingData = {
+        type: prevState.type,
+        amount: prevState.amount,
+        desc: prevState.desc,
+        date: prevState.date,
+        category: newCatName || prevState.category
+      };
+      openTransactionModal(title, existingData, async (payload) => {
+        if (!currentUid || isGuestUser) {
+          state.transactions.push({ id: Date.now().toString(), ...payload, created: new Date().toISOString() });
+          refreshAllViews();
+          showAlert("Información", "Transacción agregada localmente.");
+          return;
+        }
+        await window.FirebaseHelpers.addTransaction(currentUid, payload);
+        showAlert("Éxito", `${type === 'income' ? 'Ingreso' : 'Gasto'} agregado exitosamente.`);
+      });
+    };
+
     modalSave.onclick = async () => {
       const name = document.getElementById("new-cat-name-input").value.trim();
       if (!name) { showToast("Ingresa un nombre", "warning"); return; }
@@ -3453,7 +3488,6 @@ display: none;
       await window.FirebaseHelpers.addCategory(currentUid, type, name, selectedIcon);
       showToast("Categoría creada", "success");
 
-      // Wait a bit for Firestore snapshot to update state if possible, or manual update
       if (type === "income") {
         if (!state.incomeCategories.includes(name)) state.incomeCategories.push(name);
         state.incomeCategoriesMeta[name] = { icon: selectedIcon };
@@ -3463,17 +3497,11 @@ display: none;
       }
 
       onCreated(name);
-      openTransactionModal(prevTitle, null, (p) => { /* this is tricky because we lost the original onSave callback context easily if not careful, but openTransactionModal is called from buttons usually */ });
-      // Actually, it's better to just go back.
-      // But since we are nested, let's just re-open the original modal type
-      if (prevTitle.includes("ingreso")) btnAddIncomeMain.click();
-      else btnAddExpenseMain.click();
+      restoreTransactionModal(name);
     };
 
-    modalCancel.onclick = () => {
-      if (prevTitle.includes("ingreso")) btnAddIncomeMain.click();
-      else btnAddExpenseMain.click();
-    };
+    modalCancel.onclick = () => restoreTransactionModal();
+    closeModalBtn.onclick = () => restoreTransactionModal();
   }
 
   function closeModal(){ modal.style.display="none"; modalBody.innerHTML=""; }
