@@ -1236,6 +1236,117 @@ display: none;
   @media (max-width: 768px) {
     .hide-mobile { display: none !important; }
   }
+
+  /* New Report Modal Styles */
+  .report-header-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 16px;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--glass-border);
+  }
+  .report-header-card h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #fff;
+    text-transform: capitalize;
+  }
+
+  .report-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 2rem;
+  }
+
+  .report-stat-card {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 12px 8px;
+    border-radius: 16px;
+    text-align: center;
+    border: 1px solid var(--glass-border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .report-stat-card i {
+    font-size: 1.1rem;
+    margin-bottom: 2px;
+  }
+  .report-stat-card .label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .report-stat-card .value {
+    font-size: 0.8rem;
+    font-weight: 800;
+  }
+
+  .report-stat-card.income i, .report-stat-card.income .value { color: var(--success); }
+  .report-stat-card.expense i, .report-stat-card.expense .value { color: var(--danger); }
+  .report-stat-card.balance i, .report-stat-card.balance .value { color: var(--info); }
+
+  .report-category-item {
+    margin-bottom: 1.25rem;
+  }
+  .report-category-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .report-category-name-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .report-category-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+  }
+  .report-category-details {
+    display: flex;
+    flex-direction: column;
+  }
+  .report-category-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+  .report-category-amount {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #fff;
+  }
+  .report-category-pct {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+  .report-progress-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .report-progress-fill {
+    height: 100%;
+    border-radius: 10px;
+    background: var(--accent);
+    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
 </style>
 </head>
 <body>
@@ -3112,40 +3223,68 @@ display: none;
   }
 
   function openReportModal(report) {
-    modalTitle.innerHTML = `<strong>Reporte de ${report.month}</strong>`;
+    const totalExpenses = report.expenses || 0;
+    const balance = report.incomes - report.expenses;
+
+    modalTitle.textContent = `Reporte Mensual`;
+
+    let categoriesHtml = "";
+    const sortedCats = Object.entries(report.expenseByCategory || {}).sort((a, b) => b[1] - a[1]);
+
+    sortedCats.forEach(([name, amount], index) => {
+      const pct = totalExpenses > 0 ? ((amount / totalExpenses) * 100).toFixed(1) : 0;
+      const meta = state.expenseCategoriesMeta[name] || { icon: "💸" };
+      const colors = ['#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#06b6d4'];
+      const barColor = colors[index % colors.length];
+
+      categoriesHtml += `
+        <div class="report-category-item">
+          <div class="report-category-info">
+            <div class="report-category-name-box">
+              <div class="report-category-icon">${meta.icon}</div>
+              <div class="report-category-details">
+                <span class="report-category-name">${name}</span>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div class="report-category-amount">${formatMoney(amount)}</div>
+              <div class="report-category-pct">${pct}%</div>
+            </div>
+          </div>
+          <div class="report-progress-bar">
+            <div class="report-progress-fill" style="width: ${pct}%; background: ${barColor};"></div>
+          </div>
+        </div>
+      `;
+    });
+
     modalBody.innerHTML = `
-      <div class="summary" style="margin-top:8px;">
-        <div class="summary-card">
-          <div><strong>Ingresos</strong></div>
-          <div style="font-size:1.3rem;">${formatMoney(report.incomes)}</div>
+      <div class="report-header-card">
+        <h3>${report.month}</h3>
+      </div>
+
+      <div class="report-grid-3">
+        <div class="report-stat-card income">
+          <i class="fa-solid fa-arrow-trend-up"></i>
+          <span class="label">Ingresos</span>
+          <span class="value">${formatMoney(report.incomes)}</span>
         </div>
-        <div class="summary-card">
-          <div><strong>Gastos</strong></div>
-          <div style="font-size:1.3rem;">${formatMoney(report.expenses)}</div>
+        <div class="report-stat-card expense">
+          <i class="fa-solid fa-arrow-trend-down"></i>
+          <span class="label">Gastos</span>
+          <span class="value">${formatMoney(report.expenses)}</span>
         </div>
-        <div class="summary-card">
-          <div><strong>Ahorro Neto</strong></div>
-          <div style="font-size:1.3rem;">${formatMoney(report.contributions)}</div>
-        </div>
-        <div class="summary-card">
-          <div><strong>Meta de Ahorro</strong></div>
-          <div style="font-size:1.3rem;">${report.goal != null ? formatMoney(report.goal) : "No establecida"}</div>
+        <div class="report-stat-card balance">
+          <i class="fa-solid fa-wallet"></i>
+          <span class="label">Balance</span>
+          <span class="value">${formatMoney(balance)}</span>
         </div>
       </div>
-      <div style="display:grid;gap:16px;margin-top:14px;grid-template-columns:1fr;">
-        <div class="card" style="padding:12px;">
-          <div><strong>Ingresos vs Gastos</strong></div>
-          <div class="small">Comparación</div>
-          <div class="chart-container">
-            <canvas id="chart-report-income-vs-expense"></canvas>
-          </div>
-        </div>
-        <div class="card" style="padding:12px;">
-          <div><strong>Desglose por categoría (gastos)</strong></div>
-          <div class="small">A dónde se fue el dinero</div>
-          <div class="chart-container">
-            <canvas id="chart-report-category-expense"></canvas>
-          </div>
+
+      <div style="margin-bottom: 1rem;">
+        <h4 style="margin: 0 0 1.25rem 0; font-size: 1rem; font-weight: 800; color: #fff;">Gastos por categoría</h4>
+        <div class="report-category-list">
+          ${categoriesHtml || '<div class="small" style="text-align:center; padding: 2rem; opacity:0.5;">No hay gastos registrados en este periodo.</div>'}
         </div>
       </div>
     `;
@@ -3155,52 +3294,6 @@ display: none;
     modalCancel.onclick = closeModal;
     closeModalBtn.onclick = closeModal;
     modal.style.display = "flex";
-
-    if (chartReportIncomeVsExpense) chartReportIncomeVsExpense.destroy();
-    chartReportIncomeVsExpense = new Chart(document.getElementById("chart-report-income-vs-expense"), {
-      type: "doughnut",
-      data: {
-        labels: ["Ingresos", "Gastos"],
-        datasets: [{
-          data: [report.incomes, report.expenses],
-          backgroundColor: ["#10b981","#f87171"],
-          hoverOffset:6,
-          borderWidth:0
-        }]
-      },
-      options: {
-        plugins: {
-          legend:{position:"bottom", labels:{boxWidth:12}},
-          tooltip:{callbacks:{label: c => `${c.label}: ${formatMoney(c.parsed)}`}}
-        },
-        cutout: "60%",
-        responsive:true,
-        maintainAspectRatio:false
-      }
-    });
-
-    const reportExpenseByCatLabels = Object.keys(report.expenseByCategory);
-    const reportExpenseByCatData = reportExpenseByCatLabels.map(l => report.expenseByCategory[l]);
-    if (chartReportCategoryExpense) chartReportCategoryExpense.destroy();
-    chartReportCategoryExpense = new Chart(document.getElementById("chart-report-category-expense"), {
-      type: "pie",
-      data: {
-        labels: reportExpenseByCatLabels,
-        datasets:[{
-          data: reportExpenseByCatData,
-          backgroundColor: reportExpenseByCatLabels.map((_,i)=>`hsl(${(i*60)%360} 70% 60%)`),
-          borderWidth:0
-        }]
-      },
-      options:{
-        plugins:{
-          legend:{position:"bottom", labels:{boxWidth:12}},
-          tooltip:{callbacks:{label: c => `${c.label}: ${formatMoney(c.parsed)}`}}
-        },
-        responsive:true,
-        maintainAspectRatio:false
-      }
-    });
   }
 
   // Expense Limit functionality
