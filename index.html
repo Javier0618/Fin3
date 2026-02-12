@@ -518,6 +518,33 @@ display: none;
   .summary-card-new.savings .icon-bg { background: rgba(139, 92, 246, 0.15); }
   .summary-card-new.savings .icon-bg i { color: #a78bfa; }
 
+  /* Report Specific Summary Cards */
+  .summary-card-new.report.income { background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2); }
+  .summary-card-new.report.expense { background: rgba(139, 92, 246, 0.1); border-color: rgba(139, 92, 246, 0.2); }
+  .summary-card-new.report.expense .label { color: #a78bfa; }
+  .summary-card-new.report.expense .icon-bg i { color: #a78bfa; }
+
+  .summary-card-new.report.savings { background: rgba(139, 92, 246, 0.1); border-color: rgba(139, 92, 246, 0.2); }
+
+  .summary-card-new.report.contribution { background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.2); }
+  .summary-card-new.report.contribution .label { color: #f59e0b; }
+  .summary-card-new.report.contribution .icon-bg { background: rgba(245, 158, 11, 0.15); }
+  .summary-card-new.report.contribution .icon-bg i { color: #f59e0b; }
+
+  .summary-card-new.report .icon-bg {
+    right: 16px;
+    bottom: 50%;
+    transform: translateY(50%);
+    width: 48px;
+    height: 48px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+  }
+  .summary-card-new.report .icon-bg i {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
   .btn-action:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px -5px rgba(0, 0, 0, 0.2);
@@ -1043,6 +1070,7 @@ display: none;
 
 
   @media (max-width:800px){
+    .report-summary-grid { grid-template-columns: 1fr; }
     .summary{flex-direction:column;}
     .big-total{flex-direction:column;}
     .chart-container{min-height:140px;}
@@ -1356,75 +1384,92 @@ display: none;
 
   <!-- Informe -->
   <div id="informe-section" class="section">
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-        <div>
-          <div style="font-size:1.2rem;font-weight:600;">Informe financiero</div>
-          <div class="small">Tu situación en números</div>
-        </div>
-        <button class="btn btn-small" id="btn-generate-report">Generar Reporte del Mes Actual</button>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <h1 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.15rem;">Informe financiero</h1>
+        <div class="small" style="opacity: 0.6;">Tu situación en números</div>
       </div>
-      <div class="summary" style="margin-top:8px;">
-        <div class="summary-card">
-          <div><strong>Total ingresos</strong></div>
-          <div id="inf-income" style="font-size:1.3rem;">$0.00</div>
-        </div>
-        <div class="summary-card">
-          <div><strong>Total gastos</strong></div>
-          <div id="inf-expense" style="font-size:1.3rem;">$0.00</div>
-        </div>
-        <div class="summary-card">
-          <div><strong>Ahorro (neto)</strong></div>
-          <div id="inf-savings" style="font-size:1.3rem;">$0.00</div>
-        </div>
-        <div class="summary-card">
-          <div><strong>Aportes totales</strong></div>
-          <div id="inf-contributions" style="font-size:1.3rem;">$0.00</div>
-        </div>
-      </div>
-<div class="informe-charts" style="display:grid;gap:16px;margin-top:14px;grid-template-columns:1fr 1fr;">
-  <div class="card ingresos-vs-gastos" style="padding:12px;">
-    <div><strong>Ingresos vs Gastos</strong></div>
-    <div class="small">Comparación</div>
-    <div class="chart-container">
-      <canvas id="chart-income-vs-expense"></canvas>
+      <button class="btn btn-small" id="btn-generate-report" style="background: rgba(139, 92, 246, 0.2); color: var(--accent-light); border: 1px solid rgba(139, 92, 246, 0.3); padding: 0.6rem 1rem;">
+        <i class="fa-solid fa-file-pen" style="margin-right: 6px;"></i> Generar Reporte
+      </button>
     </div>
-  </div>
-  <div class="card progreso-meta" style="padding:12px;">
-    <div><strong>Progreso de meta</strong></div>
-    <div class="small">Aportes vs meta</div>
-    <div class="chart-container">
-      <div style="display:flex;gap:18px;align-items:center;">
-        <div style="flex:1;">
-          <canvas id="chart-goal-progress"></canvas>
-        </div>
-        <div style="min-width:100px;text-align:center;">
-          <div id="goal-percent" style="font-size:1.8rem;font-weight:700;">0%</div>
-          <div class="small">Cumplimiento</div>
-        </div>
+
+    <div class="report-summary-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 1.5rem;">
+      <!-- INGRESOS -->
+      <div class="summary-card-new report income">
+        <div class="label">Ingresos</div>
+        <div id="inf-income" class="value">$0.00</div>
+        <div class="icon-bg"><i class="fa-solid fa-chart-line"></i></div>
+      </div>
+
+      <!-- GASTOS -->
+      <div class="summary-card-new report expense">
+        <div class="label">Gastos</div>
+        <div id="inf-expense" class="value">$0.00</div>
+        <div class="icon-bg"><i class="fa-solid fa-chart-column"></i></div>
+      </div>
+
+      <!-- AHORRO NETO -->
+      <div class="summary-card-new report savings">
+        <div class="label">Ahorro Neto</div>
+        <div id="inf-savings" class="value">$0.00</div>
+        <div class="icon-bg"><i class="fa-solid fa-piggy-bank"></i></div>
+      </div>
+
+      <!-- APORTES TOTALES -->
+      <div class="summary-card-new report contribution">
+        <div class="label">Aportes Totales</div>
+        <div id="inf-contributions" class="value">$0.00</div>
+        <div class="icon-bg"><i class="fa-solid fa-sack-dollar"></i></div>
       </div>
     </div>
-  </div>
-</div>
-      <div class="card" style="margin-top:6px;padding:10px;">
-        <div><strong>Desglose por categoría (gastos)</strong></div>
-        <div class="small">A dónde se va tu dinero</div>
-        <div class="chart-container">
-          <canvas id="chart-category-expense"></canvas>
+
+    <div class="informe-charts" style="display:grid;gap:16px;margin-top:14px;grid-template-columns:1fr 1fr;">
+      <div class="card ingresos-vs-gastos" style="padding:1.25rem; border-radius: 20px;">
+        <div style="margin-bottom: 0.5rem;">
+          <div style="font-weight: 700;">Ingresos vs Gastos</div>
+          <div class="small">Comparación</div>
+        </div>
+        <div class="chart-container" style="height: 280px;">
+          <canvas id="chart-income-vs-expense"></canvas>
         </div>
       </div>
 
-      <div style="margin-top:16px;">
-        <div><strong>Reportes Guardados</strong></div>
-        <div class="small">Haz clic para ver el detalle</div>
-        <div style="overflow:auto;margin-top:6px;">
-          <table>
-            <thead>
-              <tr><th>Mes</th><th>Ingresos</th><th>Gastos</th><th>Ahorro Neto</th><th>Acciones</th></tr>
-            </thead>
-            <tbody id="monthly-reports-table"></tbody>
-          </table>
+      <div class="card progreso-meta" style="padding:1.25rem; border-radius: 20px;">
+        <div style="margin-bottom: 0.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-weight: 700;">Progreso de meta</div>
+            <div style="font-size: 0.8rem; font-weight: 700;">Aportes vs meta <span id="goal-percent-report" style="color: #3b82f6; margin-left: 4px;">0.0%</span></div>
+          </div>
         </div>
+        <div class="chart-container" style="height: 280px;">
+          <canvas id="chart-goal-progress"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px; padding:1.25rem; border-radius: 24px;">
+      <div style="margin-bottom: 1rem;">
+        <div style="font-weight: 700;">Desglose por categoría (gastos)</div>
+        <div class="small">A dónde se va tu dinero</div>
+      </div>
+      <div class="chart-container" style="height: 350px;">
+        <canvas id="chart-category-expense"></canvas>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:24px; padding: 1.25rem; border-radius: 24px;">
+      <div style="margin-bottom: 1rem;">
+        <div style="font-weight: 700;">Reportes Guardados</div>
+        <div class="small">Historial de reportes generados</div>
+      </div>
+      <div style="overflow:auto;">
+        <table>
+          <thead>
+            <tr><th>Mes</th><th>Ingresos</th><th>Gastos</th><th>Ahorro Neto</th><th>Acciones</th></tr>
+          </thead>
+          <tbody id="monthly-reports-table"></tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -1816,6 +1861,7 @@ display: none;
   const ctxGoalProgress = document.getElementById("chart-goal-progress");
   const ctxCategoryExpense = document.getElementById("chart-category-expense");
   const goalPercent = document.getElementById("goal-percent");
+  const goalPercentReport = document.getElementById("goal-percent-report");
   const saveGoalDisplay = document.getElementById("save-goal-display");
   const saveNet = document.getElementById("save-net");
   const saveContribs = document.getElementById("save-contribs");
@@ -2444,9 +2490,11 @@ display: none;
       const percent = Math.min(100, Math.max(0, (contributions / state.goal)*100));
       if (ratioGoal) ratioGoal.textContent = `${percent.toFixed(1)}%`;
       if (goalPercent) goalPercent.textContent = `${percent.toFixed(1)}%`;
+      if (goalPercentReport) goalPercentReport.textContent = `${percent.toFixed(1)}%`;
     } else {
       if (ratioGoal) ratioGoal.textContent = "—";
       if (goalPercent) goalPercent.textContent = "0%";
+      if (goalPercentReport) goalPercentReport.textContent = "0.0%";
     }
 
     try {
@@ -2660,7 +2708,7 @@ display: none;
         labels: ["Ingresos", "Gastos"],
         datasets: [{
           data: [incomes, expenses],
-          backgroundColor: ["#10b981", "#ef4444"],
+          backgroundColor: ["#10b981", "#f87171"],
           hoverOffset: 15,
           borderWidth: 0,
           borderRadius: 2
@@ -2687,15 +2735,18 @@ display: none;
         labels: ["Meta", "Aportado"],
         datasets: [{
           data: [goalAmount, saved],
-          backgroundColor: ["rgba(139, 92, 246, 0.2)", "rgba(16, 185, 129, 0.8)"],
-          borderColor: ["#8b5cf6", "#10b981"],
-          borderWidth: 2,
+          backgroundColor: ["rgba(59, 130, 246, 0.5)", "#10b981"],
+          borderColor: ["#3b82f6", "#10b981"],
+          borderWidth: 0,
           borderRadius: 12,
-          barThickness: 40
+          barThickness: 35
         }]
       },
       options: {
-        plugins: { legend: { display: false } },
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: c => ` ${c.label}: ${formatMoney(c.parsed)}` } }
+        },
         scales: {
           y: {
             beginAtZero: true,
@@ -3532,6 +3583,10 @@ display: none;
       const target = item.dataset.target;
       document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
       document.getElementById(target).classList.add("active");
+
+      if (target === "informe-section") {
+        setTimeout(drawCharts, 50); // Small delay to ensure visibility
+      }
     });
   });
 </script>
