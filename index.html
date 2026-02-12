@@ -906,23 +906,17 @@ display: none;
 <!-- App -->
 <div id="app" class="container" style="display:none; padding-bottom:100px;">
   <!-- Header -->
-  <header class="nav-top">
+  <header class="nav-top" style="padding: 1.25rem 0;">
     <div style="display: flex; align-items: center; gap: 12px;">
-      <div style="background: var(--accent); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 16px rgba(139, 92, 246, 0.3);">
-        <i class="fa-solid fa-wallet" style="color: white; font-size: 1.25rem;"></i>
-      </div>
-      <div>
-        <h2 style="font-size: 1.25rem; line-height: 1;">Fin3</h2>
-        <div class="small" style="font-size: .7rem; opacity: 0.8;">Tu libertad financiera</div>
-      </div>
+      <h2 style="font-size: 1.75rem; font-weight: 800; color: #3b82f6; letter-spacing: -0.04em;">Fin3</h2>
     </div>
     <div class="user-box">
-      <div id="user-display-name" style="margin-right: 10px; font-weight: 600; font-size: 0.9rem;" class="hide-mobile"></div>
-      <button class="btn btn-small btn-outline" id="btn-logout">
-        <i class="fa-solid fa-right-from-bracket"></i> <span class="hide-mobile">Cerrar sesión</span>
+      <div id="user-display-name" style="margin-right: 10px; font-weight: 700; font-size: 0.9rem; color: var(--text);" class="hide-mobile"></div>
+      <button class="btn btn-small" id="btn-logout" style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); width: 40px; height: 40px; padding: 0; border-radius: 10px; color: var(--muted);">
+        <i class="fa-solid fa-right-from-bracket"></i>
       </button>
-      <button class="btn btn-small" id="btn-register-now" style="display:none;">
-        <i class="fa-solid fa-user-plus"></i> Registrarse
+      <button class="btn btn-small" id="btn-register-now" style="display:none; margin-left: 8px;">
+        <i class="fa-solid fa-user-plus"></i> <span style="margin-left: 4px;">Registrarse</span>
       </button>
     </div>
   </header>
@@ -1175,72 +1169,108 @@ display: none;
 
   <!-- Yo -->
   <div id="yo-section" class="section">
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-        <div>
-          <div style="font-size:1.2rem;font-weight:600;">Yo</div>
-          <div class="small">Resumen personal</div>
-        </div>
-      </div>
-      <div class="summary" style="margin-top:8px;">
-        <div class="summary-card">
-          <div><strong>Nombre</strong></div>
-          <div id="profile-name" style="font-size:1.2rem;font-weight:600;color:#fff;">—</div>
-        </div>
-        <div class="summary-card">
-          <div><strong>Email</strong></div>
-          <div id="profile-email" style="font-size:1.2rem;font-weight:600;color:#fff;">—</div>
-        </div>
-        <div class="summary-card">
-          <div><strong>Ingresos totales</strong></div>
-          <div id="profile-income" style="font-size:1.1rem;">—</div>
-        </div>
-        <div class="summary-card">
-          <div><strong>Gastos totales</strong></div>
-          <div id="profile-expense" style="font-size:1.1rem;">—</div>
-        </div>
-        <div class="summary-card">
-          <div><strong>Ahorro (neto)</strong></div>
-          <div id="profile-savings" style="font-size:1.1rem;">—</div>
-        </div>
-      </div>
-      <div style="margin-top:12px;">
-        <div><strong>Porcentajes clave</strong></div>
-        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;">
-          <div class="summary-card" style="flex:1;min-width:160px;">
-            <div class="small">Gastos / Ingresos</div>
-            <div id="ratio-expense-income" style="font-size:1.1rem;">—</div>
-          </div>
-          <div class="summary-card" style="flex:1;min-width:160px;">
-            <div class="small">Cumplimiento de meta</div>
-            <div id="ratio-goal" style="font-size:1.1rem;">—</div>
-          </div>
-        </div>
-      </div>
+    <div style="margin-bottom: 1.5rem;">
+      <h2 style="font-size: 1.5rem;">Perfil</h2>
+      <div class="small">Tu resumen personal</div>
+    </div>
 
-      <div class="expense-limit-section card">
-        <div><strong>Límite de Gastos</strong></div>
-        <div class="small">Establece un límite para tus gastos mensuales.</div>
-        <div class="flex">
-          <div>
-            <label class="small" for="input-expense-limit">Monto Límite ($)</label>
-            <input class="input" id="input-expense-limit" type="number" placeholder="Ej: 500">
+    <!-- User Header Card -->
+    <div class="card" style="flex-direction: row; align-items: center; gap: 1.25rem; padding: 1.5rem; margin-bottom: 1.5rem;">
+      <div id="profile-avatar" style="width: 64px; height: 64px; background: var(--card-hover); border: 1px solid var(--glass-border); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 1.75rem; font-weight: 800; color: var(--accent); box-shadow: var(--shadow);">—</div>
+      <div style="flex: 1;">
+        <div id="profile-name" style="font-size: 1.25rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em;">—</div>
+        <div id="profile-email" class="small" style="opacity: 0.6; font-weight: 500;">—</div>
+      </div>
+    </div>
+
+    <!-- Financial Summary List Card -->
+    <div class="card" style="margin-bottom: 1.5rem;">
+      <h3 style="font-size: 1rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem;">Resumen financiero</h3>
+      <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+
+        <!-- Ingresos -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--glass-border);">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 36px; height: 36px; background: rgba(16, 185, 129, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--success);">
+              <i class="fa-solid fa-arrow-trend-up"></i>
+            </div>
+            <span style="font-weight: 600; font-size: 0.95rem;">Ingresos totales</span>
           </div>
-          <div style="display:flex; align-items:center; gap:10px;">
-            <label class="toggle-switch">
-              <input type="checkbox" id="toggle-expense-limit">
-              <span class="slider"></span>
-            </label>
-            <span id="expense-limit-status" class="limit-status">Inactivo</span>
+          <span id="profile-income" style="font-weight: 800; color: var(--success); font-size: 1rem;">$0,00</span>
+        </div>
+
+        <!-- Gastos -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--glass-border);">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 36px; height: 36px; background: rgba(239, 68, 68, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--danger);">
+              <i class="fa-solid fa-arrow-trend-down"></i>
+            </div>
+            <span style="font-weight: 600; font-size: 0.95rem;">Gastos totales</span>
           </div>
-          <button class="btn btn-small" id="btn-set-expense-limit">Guardar Límite</button>
-          <button class="btn btn-small btn-outline" id="btn-clear-expense-limit">Borrar Límite</button>
+          <span id="profile-expense" style="font-weight: 800; color: var(--danger); font-size: 1rem;">$0,00</span>
+        </div>
+
+        <!-- Ahorro -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--glass-border);">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 36px; height: 36px; background: rgba(139, 92, 246, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--accent);">
+              <i class="fa-solid fa-piggy-bank"></i>
+            </div>
+            <span style="font-weight: 600; font-size: 0.95rem;">Ahorro neto</span>
+          </div>
+          <span id="profile-savings" style="font-weight: 800; color: var(--accent-light); font-size: 1rem;">$0,00</span>
+        </div>
+
+        <!-- Ratio -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--glass-border);">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 36px; height: 36px; background: rgba(245, 158, 11, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--warning);">
+              <i class="fa-solid fa-chart-column"></i>
+            </div>
+            <span style="font-weight: 600; font-size: 0.95rem;">Gastos / Ingresos</span>
+          </div>
+          <span id="ratio-expense-income" style="font-weight: 800; color: var(--text); font-size: 1rem;">0%</span>
+        </div>
+
+        <!-- Cumplimiento Meta -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 36px; height: 36px; background: rgba(59, 130, 246, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--info);">
+              <i class="fa-solid fa-bullseye"></i>
+            </div>
+            <span style="font-weight: 600; font-size: 0.95rem;">Cumplimiento meta</span>
+          </div>
+          <span id="ratio-goal" style="font-weight: 800; color: var(--info); font-size: 1rem;">0%</span>
         </div>
       </div>
+    </div>
 
-      <div style="margin-top:20px; text-align:center;">
-        <button class="btn btn-outline" id="btn-reset-finances">Reiniciar Finanzas</button>
+    <!-- Expense Limit Card -->
+    <div class="card" style="margin-bottom: 1.5rem; padding: 1.5rem;">
+      <h3 style="font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem;">
+        <i class="fa-solid fa-shield-halved" style="color: var(--accent);"></i> Límite de Gastos
+      </h3>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <div class="small" style="font-weight: 600; opacity: 0.8;">Estado</div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-expense-limit">
+          <span class="slider"></span>
+        </label>
       </div>
+      <input class="input" id="input-expense-limit" type="number" placeholder="0" style="margin-bottom: 1rem; background: var(--bg);">
+      <div style="display: grid; grid-template-columns: 1fr auto; gap: 12px;">
+        <button class="btn" id="btn-set-expense-limit" style="width: 100%;">Guardar</button>
+        <button class="btn btn-outline" id="btn-clear-expense-limit">Borrar</button>
+      </div>
+      <!-- Keep the invisible status for JS logic if needed, or update JS -->
+      <span id="expense-limit-status" style="display: none;"></span>
+    </div>
+
+    <!-- Reset Footer -->
+    <div style="margin-top: 2rem; text-align: center; padding: 1rem 0; border-top: 1px solid rgba(255,255,255,0.05);">
+      <button id="btn-reset-finances" style="background: transparent; border: none; color: #f87171; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.9rem; transition: all 0.2s;">
+        <i class="fa-solid fa-trash-can"></i> Reiniciar Finanzas
+      </button>
     </div>
   </div>
 
@@ -1906,12 +1936,15 @@ display: none;
     onSnapshot(profileRef, snap => {
       const data = snap.exists() ? snap.data() : {};
       profileEmail.textContent = data.email || "";
+      const avatarEl = document.getElementById("profile-avatar");
       if (data.name) {
         profileName.textContent = data.name;
         document.getElementById("user-display-name").textContent = data.name;
+        if (avatarEl) avatarEl.textContent = data.name.charAt(0).toUpperCase();
         profileName.style.opacity = "1";
       } else {
         profileName.textContent = "(sin nombre)";
+        if (avatarEl) avatarEl.textContent = "?";
         profileName.style.opacity = "0.7";
       }
       setReady("profile");
