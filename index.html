@@ -3183,17 +3183,22 @@ display: none;
       const txDate = convertToUTCMinus5(tx.date);
       return txDate.getMonth() === currentMonth && txDate.getFullYear() === currentYear;
     });
-    const monthlyContributions = state.contributions.filter(contrib => {
+
+    // For savings, we want the cumulative balance up to the end of the report month
+    const contributionsUpToMonth = state.contributions.filter(contrib => {
       const contribDate = convertToUTCMinus5(contrib.date);
-      return contribDate.getMonth() === currentMonth && contribDate.getFullYear() === currentYear;
+      return contribDate.getFullYear() < currentYear ||
+             (contribDate.getFullYear() === currentYear && contribDate.getMonth() <= currentMonth);
     });
-    const monthlyWithdrawals = state.withdrawals.filter(withdrawal => {
+    const withdrawalsUpToMonth = state.withdrawals.filter(withdrawal => {
       const withdrawalDate = convertToUTCMinus5(withdrawal.date);
-      return withdrawalDate.getMonth() === currentMonth && withdrawalDate.getFullYear() === currentYear;
+      return withdrawalDate.getFullYear() < currentYear ||
+             (withdrawalDate.getFullYear() === currentYear && withdrawalDate.getMonth() <= currentMonth);
     });
 
-    // Pasa las transacciones, contribuciones y retiros filtrados a la función aggregate
-    const { incomes, expenses, contributions, rawContribs, withdrawals } = aggregate(monthlyTransactions, monthlyContributions, monthlyWithdrawals);
+    // We calculate monthly stats for incomes/expenses, but cumulative for savings
+    const { incomes, expenses } = aggregate(monthlyTransactions, [], []);
+    const { contributions, rawContribs, withdrawals } = aggregate([], contributionsUpToMonth, withdrawalsUpToMonth);
 
     const expenseByCat = {};
     monthlyTransactions.filter(t=>t.type==="expense").forEach(t=>{
