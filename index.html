@@ -1290,6 +1290,53 @@ display: none;
   .report-stat-card.income i, .report-stat-card.income .value { color: var(--success); }
   .report-stat-card.expense i, .report-stat-card.expense .value { color: var(--danger); }
   .report-stat-card.balance i, .report-stat-card.balance .value { color: var(--info); }
+  .report-stat-card.savings i, .report-stat-card.savings .value { color: var(--accent-light); }
+
+  .report-goal-card {
+    background: rgba(139, 92, 246, 0.08);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 20px;
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .report-goal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .report-goal-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .report-goal-pct {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--accent-light);
+  }
+  .report-goal-bar {
+    width: 100%;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .report-goal-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 10px;
+  }
+  .report-goal-detail {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-align: right;
+  }
 
   .report-category-item {
     margin-bottom: 1.25rem;
@@ -1577,7 +1624,7 @@ display: none;
       <div style="overflow:auto;">
         <table>
           <thead>
-            <tr><th>Mes</th><th>Ingresos</th><th>Gastos</th><th>Ahorro Neto</th><th>Acciones</th></tr>
+            <tr><th>Mes</th><th>Ingresos</th><th>Gastos</th><th>Ahorro Neto</th><th>% Meta</th><th>Acciones</th></tr>
           </thead>
           <tbody id="monthly-reports-table"></tbody>
         </table>
@@ -3177,12 +3224,17 @@ display: none;
   function renderMonthlyReportsTable() {
     monthlyReportsTable.innerHTML = "";
     state.monthlyReports.forEach(report => {
+      const savings = report.contributions || 0;
+      const goal = report.goal || 0;
+      const compliance = goal > 0 ? ((savings / goal) * 100).toFixed(0) + "%" : "—";
+
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>${report.month}</td>
         <td>${formatMoney(report.incomes)}</td>
         <td>${formatMoney(report.expenses)}</td>
         <td>${formatMoney(report.contributions)}</td>
+        <td><span class="pill-small" style="background: rgba(139, 92, 246, 0.1); color: var(--accent-light);">${compliance}</span></td>
         <td style="display:flex;gap:6px;">
           <button class="btn-small" data-action="view-report" data-id="${report.id}">Ver</button>
           <button class="btn-small" data-action="delete-report" data-id="${report.id}">Eliminar</button>
@@ -3225,6 +3277,9 @@ display: none;
   function openReportModal(report) {
     const totalExpenses = report.expenses || 0;
     const balance = report.incomes - report.expenses;
+    const savings = report.contributions || 0;
+    const goal = report.goal || 0;
+    const compliancePct = goal > 0 ? Math.min(100, (savings / goal) * 100).toFixed(1) : "0.0";
 
     modalTitle.textContent = `Reporte Mensual`;
 
@@ -3263,7 +3318,7 @@ display: none;
         <h3>${report.month}</h3>
       </div>
 
-      <div class="report-grid-3">
+      <div class="report-grid-3" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 1rem;">
         <div class="report-stat-card income">
           <i class="fa-solid fa-arrow-trend-up"></i>
           <span class="label">Ingresos</span>
@@ -3278,6 +3333,26 @@ display: none;
           <i class="fa-solid fa-wallet"></i>
           <span class="label">Balance</span>
           <span class="value">${formatMoney(balance)}</span>
+        </div>
+        <div class="report-stat-card savings">
+          <i class="fa-solid fa-piggy-bank"></i>
+          <span class="label">Ahorro Neto</span>
+          <span class="value">${formatMoney(savings)}</span>
+        </div>
+      </div>
+
+      <div class="report-goal-card">
+        <div class="report-goal-header">
+          <div class="report-goal-title">
+            <i class="fa-solid fa-bullseye"></i> Cumplimiento Meta
+          </div>
+          <div class="report-goal-pct">${compliancePct}%</div>
+        </div>
+        <div class="report-goal-bar">
+          <div class="report-goal-fill" style="width: ${compliancePct}%;"></div>
+        </div>
+        <div class="report-goal-detail">
+          ${formatMoney(savings)} de ${goal > 0 ? formatMoney(goal) : "$0.00"}
         </div>
       </div>
 
