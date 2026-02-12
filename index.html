@@ -518,6 +518,33 @@ display: none;
   .summary-card-new.savings .icon-bg { background: rgba(139, 92, 246, 0.15); }
   .summary-card-new.savings .icon-bg i { color: #a78bfa; }
 
+  /* Report Specific Summary Cards */
+  .summary-card-new.report.income { background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2); }
+  .summary-card-new.report.expense { background: rgba(139, 92, 246, 0.1); border-color: rgba(139, 92, 246, 0.2); }
+  .summary-card-new.report.expense .label { color: #a78bfa; }
+  .summary-card-new.report.expense .icon-bg i { color: #a78bfa; }
+  
+  .summary-card-new.report.savings { background: rgba(139, 92, 246, 0.1); border-color: rgba(139, 92, 246, 0.2); }
+  
+  .summary-card-new.report.contribution { background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.2); }
+  .summary-card-new.report.contribution .label { color: #f59e0b; }
+  .summary-card-new.report.contribution .icon-bg { background: rgba(245, 158, 11, 0.15); }
+  .summary-card-new.report.contribution .icon-bg i { color: #f59e0b; }
+  
+  .summary-card-new.report .icon-bg {
+    right: 16px;
+    bottom: 50%;
+    transform: translateY(50%);
+    width: 48px;
+    height: 48px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+  }
+  .summary-card-new.report .icon-bg i {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+
   .btn-action:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px -5px rgba(0, 0, 0, 0.2);
@@ -864,6 +891,148 @@ display: none;
     color: #fff;
   }
 
+  /* --- Savings Modern Section Styles --- */
+  .savings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+  }
+  .savings-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+  @media (max-width: 800px) {
+    .savings-summary-grid { grid-template-columns: 1fr; }
+  }
+  .savings-card {
+    padding: 1.25rem;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--glass-border);
+    background: rgba(255,255,255,0.02);
+  }
+  .savings-card .label {
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  .savings-card .value {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.02em;
+  }
+  .savings-card .sub-value {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 4px;
+    opacity: 0.7;
+  }
+  .savings-card .icon-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+  }
+  .savings-card.meta { background: rgba(139, 92, 246, 0.08); border-color: rgba(139, 92, 246, 0.2); }
+  .savings-card.meta .icon-badge { background: #ef4444; color: #fff; }
+  .savings-card.net { background: rgba(16, 185, 129, 0.08); border-color: rgba(16, 185, 129, 0.2); }
+  .savings-card.net .icon-badge { background: #ff4d94; color: #fff; }
+  .savings-card.total { background: rgba(245, 158, 11, 0.08); border-color: rgba(245, 158, 11, 0.2); }
+  .savings-card.total .icon-badge { background: #f59e0b; color: #fff; }
+
+  .goal-progress-section {
+    margin-bottom: 2rem;
+    background: rgba(255,255,255,0.02);
+    padding: 1.25rem;
+    border-radius: 20px;
+    border: 1px solid var(--glass-border);
+  }
+  .progress-labels {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  .progress-track {
+    width: 100%;
+    height: 10px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 10px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .savings-action-card {
+    background: var(--card);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  .action-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .action-input-group {
+    display: flex;
+    gap: 10px;
+  }
+  .action-input-group .input { flex: 1; }
+
+  .history-section-modern {
+    margin-top: 2rem;
+  }
+  .history-item-savings {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--glass-border);
+    padding: 1rem;
+    border-radius: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+  }
+  .history-item-savings:hover {
+    background: rgba(255,255,255,0.04);
+    transform: translateX(4px);
+  }
+  .history-item-savings .amount {
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: #10b981;
+  }
+  .history-item-savings.withdrawal .amount { color: #ef4444; }
+  .history-item-savings .date {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
   /* New style for registration prompt modal */
   #registration-prompt-modal {
     position: fixed;
@@ -901,6 +1070,7 @@ display: none;
 
 
   @media (max-width:800px){
+    .report-summary-grid { grid-template-columns: 1fr; }
     .summary{flex-direction:column;}
     .big-total{flex-direction:column;}
     .chart-container{min-height:140px;}
@@ -1066,6 +1236,164 @@ display: none;
   @media (max-width: 768px) {
     .hide-mobile { display: none !important; }
   }
+
+  /* New Report Modal Styles */
+  .report-header-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 16px;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--glass-border);
+  }
+  .report-header-card h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #fff;
+    text-transform: capitalize;
+  }
+  
+  .report-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 2rem;
+  }
+  
+  .report-stat-card {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 12px 8px;
+    border-radius: 16px;
+    text-align: center;
+    border: 1px solid var(--glass-border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .report-stat-card i {
+    font-size: 1.1rem;
+    margin-bottom: 2px;
+  }
+  .report-stat-card .label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .report-stat-card .value {
+    font-size: 0.8rem;
+    font-weight: 800;
+  }
+  
+  .report-stat-card.income i, .report-stat-card.income .value { color: var(--success); }
+  .report-stat-card.expense i, .report-stat-card.expense .value { color: var(--danger); }
+  .report-stat-card.balance i, .report-stat-card.balance .value { color: var(--info); }
+  .report-stat-card.savings i, .report-stat-card.savings .value { color: var(--accent-light); }
+
+  .report-goal-card {
+    background: rgba(139, 92, 246, 0.08);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 20px;
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .report-goal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .report-goal-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .report-goal-pct {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--accent-light);
+  }
+  .report-goal-bar {
+    width: 100%;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .report-goal-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 10px;
+  }
+  .report-goal-detail {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  .report-category-item {
+    margin-bottom: 1.25rem;
+  }
+  .report-category-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .report-category-name-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .report-category-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+  }
+  .report-category-details {
+    display: flex;
+    flex-direction: column;
+  }
+  .report-category-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+  .report-category-amount {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #fff;
+  }
+  .report-category-pct {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  
+  .report-progress-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .report-progress-fill {
+    height: 100%;
+    border-radius: 10px;
+    background: var(--accent);
+    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
 </style>
 </head>
 <body>
@@ -1214,181 +1542,178 @@ display: none;
 
   <!-- Informe -->
   <div id="informe-section" class="section">
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-        <div>
-          <div style="font-size:1.2rem;font-weight:600;">Informe financiero</div>
-          <div class="small">Tu situación en números</div>
-        </div>
-        <button class="btn btn-small" id="btn-generate-report">Generar Reporte del Mes Actual</button>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <h1 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.15rem;">Informe financiero</h1>
+        <div class="small" style="opacity: 0.6;">Tu situación en números</div>
       </div>
-      <div class="summary" style="margin-top:8px;">
-        <div class="summary-card">
-          <div><strong>Total ingresos</strong></div>
-          <div id="inf-income" style="font-size:1.3rem;">$0.00</div>
-        </div>
-        <div class="summary-card">
-          <div><strong>Total gastos</strong></div>
-          <div id="inf-expense" style="font-size:1.3rem;">$0.00</div>
-        </div>
-        <div class="summary-card">
-          <div><strong>Ahorro (neto)</strong></div>
-          <div id="inf-savings" style="font-size:1.3rem;">$0.00</div>
-        </div>
-        <div class="summary-card">
-          <div><strong>Aportes totales</strong></div>
-          <div id="inf-contributions" style="font-size:1.3rem;">$0.00</div>
-        </div>
-      </div>
-<div class="informe-charts" style="display:grid;gap:16px;margin-top:14px;grid-template-columns:1fr 1fr;">
-  <div class="card ingresos-vs-gastos" style="padding:12px;">
-    <div><strong>Ingresos vs Gastos</strong></div>
-    <div class="small">Comparación</div>
-    <div class="chart-container">
-      <canvas id="chart-income-vs-expense"></canvas>
+      <button class="btn btn-small" id="btn-generate-report" style="background: rgba(139, 92, 246, 0.2); color: var(--accent-light); border: 1px solid rgba(139, 92, 246, 0.3); padding: 0.6rem 1rem;">
+        <i class="fa-solid fa-file-pen" style="margin-right: 6px;"></i> Generar Reporte
+      </button>
     </div>
-  </div>
-  <div class="card progreso-meta" style="padding:12px;">
-    <div><strong>Progreso de meta</strong></div>
-    <div class="small">Aportes vs meta</div>
-    <div class="chart-container">
-      <div style="display:flex;gap:18px;align-items:center;">
-        <div style="flex:1;">
-          <canvas id="chart-goal-progress"></canvas>
-        </div>
-        <div style="min-width:100px;text-align:center;">
-          <div id="goal-percent" style="font-size:1.8rem;font-weight:700;">0%</div>
-          <div class="small">Cumplimiento</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-      <div class="card" style="margin-top:6px;padding:10px;">
-        <div><strong>Desglose por categoría (gastos)</strong></div>
-        <div class="small">A dónde se va tu dinero</div>
-        <div class="chart-container">
-          <canvas id="chart-category-expense"></canvas>
-        </div>
+
+    <div class="report-summary-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 1.5rem;">
+      <!-- INGRESOS -->
+      <div class="summary-card-new report income">
+        <div class="label">Ingresos</div>
+        <div id="inf-income" class="value">$0.00</div>
+        <div class="icon-bg"><i class="fa-solid fa-chart-line"></i></div>
       </div>
 
-      <div style="margin-top:16px;">
-        <div><strong>Reportes Guardados</strong></div>
-        <div class="small">Haz clic para ver el detalle</div>
-        <div style="overflow:auto;margin-top:6px;">
-          <table>
-            <thead>
-              <tr><th>Mes</th><th>Ingresos</th><th>Gastos</th><th>Ahorro Neto</th><th>Acciones</th></tr>
-            </thead>
-            <tbody id="monthly-reports-table"></tbody>
-          </table>
+      <!-- GASTOS -->
+      <div class="summary-card-new report expense">
+        <div class="label">Gastos</div>
+        <div id="inf-expense" class="value">$0.00</div>
+        <div class="icon-bg"><i class="fa-solid fa-chart-column"></i></div>
+      </div>
+
+      <!-- AHORRO NETO -->
+      <div class="summary-card-new report savings">
+        <div class="label">Ahorro Neto</div>
+        <div id="inf-savings" class="value">$0.00</div>
+        <div class="icon-bg"><i class="fa-solid fa-piggy-bank"></i></div>
+      </div>
+
+      <!-- APORTES TOTALES -->
+      <div class="summary-card-new report contribution">
+        <div class="label">Aportes Totales</div>
+        <div id="inf-contributions" class="value">$0.00</div>
+        <div class="icon-bg"><i class="fa-solid fa-sack-dollar"></i></div>
+      </div>
+    </div>
+
+    <div class="informe-charts" style="display:grid;gap:16px;margin-top:14px;grid-template-columns:1fr 1fr;">
+      <div class="card ingresos-vs-gastos" style="padding:1.25rem; border-radius: 20px;">
+        <div style="margin-bottom: 0.5rem;">
+          <div style="font-weight: 700;">Ingresos vs Gastos</div>
+          <div class="small">Comparación</div>
         </div>
+        <div class="chart-container" style="height: 280px;">
+          <canvas id="chart-income-vs-expense"></canvas>
+        </div>
+      </div>
+      
+      <div class="card progreso-meta" style="padding:1.25rem; border-radius: 20px;">
+        <div style="margin-bottom: 0.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-weight: 700;">Progreso de meta</div>
+            <div style="font-size: 0.8rem; font-weight: 700;">Aportes vs meta <span id="goal-percent-report" style="color: #3b82f6; margin-left: 4px;">0.0%</span></div>
+          </div>
+        </div>
+        <div class="chart-container" style="height: 280px;">
+          <canvas id="chart-goal-progress"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px; padding:1.25rem; border-radius: 24px;">
+      <div style="margin-bottom: 1rem;">
+        <div style="font-weight: 700;">Desglose por categoría (gastos)</div>
+        <div class="small">A dónde se va tu dinero</div>
+      </div>
+      <div class="chart-container" style="height: 350px;">
+        <canvas id="chart-category-expense"></canvas>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:24px; padding: 1.25rem; border-radius: 24px;">
+      <div style="margin-bottom: 1rem;">
+        <div style="font-weight: 700;">Reportes Guardados</div>
+        <div class="small">Historial de reportes generados</div>
+      </div>
+      <div style="overflow:auto;">
+        <table>
+          <thead>
+            <tr><th>Mes</th><th>Ingresos</th><th>Gastos</th><th>Ahorro Neto</th><th>% Meta</th><th>Acciones</th></tr>
+          </thead>
+          <tbody id="monthly-reports-table"></tbody>
+        </table>
       </div>
     </div>
   </div>
 
   <!-- Ahorro -->
   <div id="ahorro-section" class="section">
-    <div class="card" style="border: none; background: transparent; box-shadow: none; padding: 0;">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap; margin-bottom: 1.5rem;">
-        <div>
-          <h2 style="font-size: 1.5rem;">Mis Ahorros</h2>
-          <div class="small">Planifica y alcanza tus metas</div>
-        </div>
-        <div id="ahorro-date-display" style="text-align: right;" class="hide-mobile">
-          <div id="ahorro-current-year" style="font-size: 1.5rem; font-weight: 700; color: var(--accent);"></div>
-          <div id="ahorro-current-month-day" class="small"></div>
-        </div>
+    <div class="savings-header">
+      <div>
+        <h1 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.15rem;">Ahorro</h1>
+        <div class="small" style="opacity: 0.6;">Meta, aportes y retiros</div>
       </div>
+      <div id="ahorro-current-date" class="small" style="text-align: right; text-transform: capitalize; font-weight: 600; opacity: 0.6;"></div>
+    </div>
 
-      <div class="summary">
-        <div class="summary-card" style="border-top: 4px solid var(--accent);">
-          <div class="small" style="text-transform: uppercase; font-weight: 700;">Meta Actual</div>
-          <div id="save-goal-display" style="font-size:1.5rem; font-weight: 800; color: var(--text);">—</div>
-          <i class="fa-solid fa-bullseye" style="position: absolute; right: 1.5rem; top: 1.5rem; font-size: 1.5rem; opacity: 0.1;"></i>
-        </div>
-        <div class="summary-card" style="border-top: 4px solid var(--success);">
-          <div class="small" style="text-transform: uppercase; font-weight: 700;">Ahorro Neto</div>
-          <div id="save-net" style="font-size:1.5rem; font-weight: 800; color: var(--success);">—</div>
-          <i class="fa-solid fa-vault" style="position: absolute; right: 1.5rem; top: 1.5rem; font-size: 1.5rem; opacity: 0.1;"></i>
-        </div>
-        <div class="summary-card" style="border-top: 4px solid var(--info);">
-          <div class="small" style="text-transform: uppercase; font-weight: 700;">Aportes Totales</div>
-          <div id="save-contribs" style="font-size:1.5rem; font-weight: 800; color: var(--info);">—</div>
-          <i class="fa-solid fa-piggy-bank" style="position: absolute; right: 1.5rem; top: 1.5rem; font-size: 1.5rem; opacity: 0.1;"></i>
-        </div>
+    <div class="savings-summary-grid">
+      <!-- META -->
+      <div class="savings-card meta">
+        <div class="label">Meta</div>
+        <div id="save-goal-display" class="value">$0.00</div>
+        <div class="icon-badge"><i class="fa-solid fa-bullseye"></i></div>
       </div>
-
-      <div class="card" style="margin-top:1.5rem;">
-        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:2rem;">
-          <div>
-            <h3 style="font-size: 1rem; margin-bottom: 1rem;"><i class="fa-solid fa-gear" style="color: var(--accent);"></i> Configuración de Meta</h3>
-            <div style="display:flex;gap:8px;align-items:center;">
-              <input class="input" id="input-goal" type="number" placeholder="Meta ($)" style="flex:1;">
-              <button class="btn btn-small" id="btn-set-goal">Establecer</button>
-              <button class="btn btn-small btn-outline" id="btn-clear-goal"><i class="fa-solid fa-trash"></i></button>
-            </div>
-            
-            <div style="margin-top: 2rem;">
-              <h3 style="font-size: 1rem; margin-bottom: 1rem;"><i class="fa-solid fa-chart-line" style="color: var(--success);"></i> Progreso</h3>
-              <div style="display:flex;gap:1.5rem;align-items:center;">
-                <div class="percent-circle" style="width: 100px; height: 100px; background: var(--glass); border: 2px solid var(--glass-border);">
-                  <div class="percent-text" id="circle-percent-text" style="font-size: 1.25rem;">0%</div>
-                </div>
-                <div>
-                  <div id="goal-detail" style="font-size:1.1rem; font-weight: 700;">—</div>
-                  <div class="small">recaudado de la meta</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-            <div>
-              <h3 style="font-size: 1rem; margin-bottom: 1rem;"><i class="fa-solid fa-plus" style="color: var(--success);"></i> Nuevo Aporte</h3>
-              <div style="display:flex;gap:8px;align-items:center;">
-                <input class="input" id="input-contribution" type="number" placeholder="Monto ($)" style="flex:1;">
-                <button class="btn btn-small" id="btn-add-contribution" style="background: var(--success);">Aportar</button>
-              </div>
-            </div>
-            <div>
-              <h3 style="font-size: 1rem; margin-bottom: 1rem;"><i class="fa-solid fa-minus" style="color: var(--danger);"></i> Retiro de Ahorro</h3>
-              <div style="display:flex;gap:8px;align-items:center;">
-                <input class="input" id="input-withdraw" type="number" placeholder="Monto ($)" style="flex:1;">
-                <button class="btn btn-small btn-outline" id="btn-withdraw">Retirar</button>
-              </div>
-              <div class="small" style="margin-top:0.5rem; font-size: 0.7rem; opacity: 0.7;">
-                <i class="fa-solid fa-info-circle"></i> Los retiros se registrarán como ingresos.
-              </div>
-            </div>
-          </div>
-        </div>
+      <!-- AHORRO NETO -->
+      <div class="savings-card net">
+        <div class="label">Ahorro Neto</div>
+        <div id="save-net" class="value">$0.00</div>
+        <div class="icon-badge"><i class="fa-solid fa-piggy-bank"></i></div>
       </div>
-
-      <div style="margin-top:16px;">
-        <div><strong>Historial de aportes</strong></div>
-        <div class="small">Editar o eliminar</div>
-        <div style="overflow:auto;margin-top:6px;">
-          <table>
-            <thead>
-              <tr><th>Monto</th><th>Fecha</th><th>Acciones</th></tr>
-            </thead>
-            <tbody id="contrib-table"></tbody>
-          </table>
-        </div>
+      <!-- APORTES -->
+      <div class="savings-card total">
+        <div class="label">Aportes</div>
+        <div id="save-contribs" class="value">$0.00</div>
+        <div class="icon-badge"><i class="fa-solid fa-sack-dollar"></i></div>
       </div>
+    </div>
 
-      <div style="margin-top:16px;">
-        <div><strong>Historial de retiros</strong></div>
-        <div class="small">Editar o eliminar</div>
-        <div style="overflow:auto;margin-top:6px;">
-          <table>
-            <thead>
-              <tr><th>Monto</th><th>Fecha</th><th>Acciones</th></tr>
-            </thead>
-            <tbody id="withdrawal-table"></tbody>
-          </table>
-        </div>
+    <!-- Cumplimiento de meta -->
+    <div class="goal-progress-section">
+      <div class="progress-labels">
+        <div style="font-size: 0.85rem; font-weight: 700;">Cumplimiento de meta</div>
+        <div id="goal-percent-text" style="font-size: 1rem; font-weight: 800; color: var(--accent);">0.0%</div>
+      </div>
+      <div class="progress-track">
+        <div id="goal-progress-fill" class="progress-fill" style="width: 0%;"></div>
+      </div>
+      <div id="goal-detail-text" class="small" style="opacity: 0.5; font-weight: 500;">$0.00 de $0.00</div>
+    </div>
+
+    <!-- Actions -->
+    <div class="savings-action-card">
+      <div class="action-title"><i class="fa-solid fa-gear" style="color: var(--accent);"></i> Establecer meta</div>
+      <div class="action-input-group">
+        <input class="input" id="input-goal" type="number" placeholder="Meta ($)">
+        <button class="btn" id="btn-set-goal" style="background: #5c67f2;">Guardar</button>
+        <button class="btn btn-outline" id="btn-clear-goal">Borrar</button>
+      </div>
+    </div>
+
+    <div class="savings-action-card">
+      <div class="action-title"><i class="fa-solid fa-arrow-down" style="color: #10b981;"></i> Agregar aporte</div>
+      <div class="action-input-group">
+        <input class="input" id="input-contribution" type="number" placeholder="Monto ($)">
+        <button class="btn" id="btn-add-contribution" style="background: #10b981;">Agregar</button>
+      </div>
+    </div>
+
+    <div class="savings-action-card">
+      <div class="action-title"><i class="fa-solid fa-arrow-up" style="color: #f59e0b;"></i> Retirar aporte</div>
+      <div class="action-input-group">
+        <input class="input" id="input-withdraw" type="number" placeholder="Monto ($)">
+        <button class="btn" id="btn-withdraw" style="background: #f59e0b;">Retirar</button>
+      </div>
+      <div class="small" style="margin-top: 0.75rem; opacity: 0.5;">Se convertirá en ingreso "Retiro de ahorro".</div>
+    </div>
+
+    <!-- History -->
+    <div class="history-section-modern">
+      <div style="font-size: 0.95rem; font-weight: 700; margin-bottom: 1rem;">Historial de aportes</div>
+      <div id="contrib-list-modern" class="history-list-savings">
+        <!-- Modern items will be injected here -->
+      </div>
+    </div>
+
+    <div class="history-section-modern">
+      <div style="font-size: 0.95rem; font-weight: 700; margin-bottom: 1rem; margin-top: 1rem;">Historial de retiros</div>
+      <div id="withdrawal-list-modern" class="history-list-savings">
+        <!-- Modern items will be injected here -->
       </div>
     </div>
   </div>
@@ -1521,7 +1846,7 @@ display: none;
   </div>
   <div class="nav-item" data-target="yo-section" id="nav-yo">
     <i class="fa-solid fa-user"></i>
-    <span>Perfil</span>
+    <span>Yo</span>
   </div>
 </div>
 
@@ -1544,7 +1869,7 @@ display: none;
 <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 2500; display: flex; flex-direction: column; gap: 10px;"></div>
 
 <!-- Modal -->
-<div id="modal" style="position:fixed;inset:0;display:none;background:rgba(11, 15, 26, 0.85);backdrop-filter:blur(15px);align-items:center;justify-content:center;padding:1rem;z-index:99;">
+<div id="modal" style="position:fixed;inset:0;display:none;background:rgba(11, 15, 26, 0.85);backdrop-filter:blur(15px);align-items:center;justify-content:center;padding:1rem;z-index:1100;">
   <div class="card" style="max-width:480px;width:100%;position:relative;border-radius:28px;padding:2rem;">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
       <div id="modal-title" style="font-size:1.25rem;font-weight:800;letter-spacing:-0.02em;">Agregar</div>
@@ -1605,9 +1930,17 @@ display: none;
     return "$" + num.toLocaleString("es-CO", {minimumFractionDigits:2, maximumFractionDigits:2});
   };
 
+  // Helper for Firestore timestamps or strings
+  const safeDate = (d) => {
+    if (!d) return new Date();
+    if (typeof d.toDate === 'function') return d.toDate(); 
+    const date = new Date(d);
+    return isNaN(date.getTime()) ? new Date() : date;
+  };
+
   // Function to convert UTC date string to UTC-5 date object
   const convertToUTCMinus5 = (dateString) => {
-    const date = new Date(dateString);
+    const date = safeDate(dateString);
     // Get the UTC time in milliseconds
     const utcTime = date.getTime() + (date.getTimezoneOffset() * 60 * 1000);
     // Create a new Date object for UTC-5 (5 hours behind UTC)
@@ -1686,9 +2019,7 @@ display: none;
   const ctxGoalProgress = document.getElementById("chart-goal-progress");
   const ctxCategoryExpense = document.getElementById("chart-category-expense");
   const goalPercent = document.getElementById("goal-percent");
-  const circlePercentText = document.getElementById("circle-percent-text");
-  const goalDetail = document.getElementById("goal-detail");
-
+  const goalPercentReport = document.getElementById("goal-percent-report");
   const saveGoalDisplay = document.getElementById("save-goal-display");
   const saveNet = document.getElementById("save-net");
   const saveContribs = document.getElementById("save-contribs");
@@ -1699,8 +2030,12 @@ display: none;
   const btnAddContribution = document.getElementById("btn-add-contribution");
   const inputWithdraw = document.getElementById("input-withdraw");
   const btnWithdraw = document.getElementById("btn-withdraw");
-  const contribTable = document.getElementById("contrib-table");
-  const withdrawalTable = document.getElementById("withdrawal-table");
+  const goalPercentText = document.getElementById("goal-percent-text");
+  const goalProgressFill = document.getElementById("goal-progress-fill");
+  const goalDetailText = document.getElementById("goal-detail-text");
+  const ahorroCurrentDate = document.getElementById("ahorro-current-date");
+  const contribListModern = document.getElementById("contrib-list-modern");
+  const withdrawalListModern = document.getElementById("withdrawal-list-modern");
 
   const profileName = document.getElementById("profile-name");
   const profileEmail = document.getElementById("profile-email");
@@ -1973,7 +2308,6 @@ display: none;
         btnRegisterNow.style.display = "inline-flex";
         profileName.textContent = "Invitado"; // Mostrar "Invitado" para usuarios anónimos
         profileEmail.textContent = "No registrado";
-        document.getElementById("user-display-name").textContent = "Invitado";
       } else {
         btnLogout.style.display = "inline-flex";
         btnRegisterNow.style.display = "none";
@@ -2199,22 +2533,21 @@ display: none;
 
   function updateDateDisplays() {
     const now = convertToUTCMinus5(new Date().toISOString());
-    const year = now.getFullYear();
-    const monthDay = now.toLocaleDateString("es-CO", { month: 'long', day: 'numeric' });
     
     // New full date display for Inicio
     const fullDateDisplay = document.getElementById("current-date-full");
     if (fullDateDisplay) {
       const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
       let formattedDate = now.toLocaleDateString("es-CO", options);
-      // Capitalize each word for the date
       formattedDate = formattedDate.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
       fullDateDisplay.textContent = formattedDate;
     }
 
-    if (ahorroCurrentYearDisplay && ahorroCurrentMonthDayDisplay) {
-      ahorroCurrentYearDisplay.textContent = year;
-      ahorroCurrentMonthDayDisplay.textContent = monthDay;
+    if (ahorroCurrentDate) {
+      const options = { day: 'numeric', month: 'long', year: 'numeric' };
+      let formattedDate = now.toLocaleDateString("es-CO", options);
+      formattedDate = formattedDate.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      ahorroCurrentDate.textContent = formattedDate;
     }
   }
 
@@ -2244,11 +2577,12 @@ display: none;
       const currentMonthExpenses = state.transactions.filter(t => {
         const txDate = convertToUTCMinus5(t.date);
         const now = convertToUTCMinus5(new Date().toISOString());
+        if (isNaN(txDate.getTime())) return false;
         return t.type === 'expense' && txDate.getMonth() === now.getMonth() && txDate.getFullYear() === now.getFullYear();
       }).reduce((sum, t) => sum + Number(t.amount), 0);
 
       if (currentMonthExpenses > state.expenseLimit.amount) {
-        inicioAvailableMoneyValue.classList.add('limit-exceeded'); // Aplicar clase al span del valor
+        if (inicioAvailableMoneyValue) inicioAvailableMoneyValue.classList.add('limit-exceeded'); // Aplicar clase al span del valor
         if (!document.getElementById('expense-limit-alert')) {
           const alertDiv = document.createElement('div');
           alertDiv.id = 'expense-limit-alert';
@@ -2265,12 +2599,12 @@ display: none;
           }, 5000); // Alert disappears after 5 seconds
         }
       } else {
-        inicioAvailableMoneyValue.classList.remove('limit-exceeded'); // Remover clase del span del valor
+        if (inicioAvailableMoneyValue) inicioAvailableMoneyValue.classList.remove('limit-exceeded'); // Remover clase del span del valor
         const existingAlert = document.getElementById('expense-limit-alert');
         if (existingAlert) existingAlert.remove();
       }
     } else {
-      inicioAvailableMoneyValue.classList.remove('limit-exceeded'); // Remover clase del span del valor
+      if (inicioAvailableMoneyValue) inicioAvailableMoneyValue.classList.remove('limit-exceeded'); // Remover clase del span del valor
       const existingAlert = document.getElementById('expense-limit-alert');
       if (existingAlert) existingAlert.remove();
     }
@@ -2287,37 +2621,23 @@ display: none;
     expenseLimitStatus.textContent = state.expenseLimit.active ? 'Activo' : 'Inactivo';
 
     // === Actualización de la sección de Ahorro ===
-    saveGoalDisplay.textContent = state.goal !== null ? formatMoney(state.goal) : "—";
+    saveGoalDisplay.textContent = state.goal !== null ? formatMoney(state.goal) : "$0.00";
     saveNet.textContent = formatMoney(contributions);
     saveContribs.textContent = formatMoney(rawContribs);
     inputGoal.value = state.goal !== null ? state.goal : "";
 
+    if (state.goal != null && state.goal > 0) {
+      const percent = Math.min(100, Math.max(0, (contributions / state.goal)*100));
+      goalPercentText.textContent = `${percent.toFixed(1)}%`;
+      goalProgressFill.style.width = `${percent}%`;
+      goalDetailText.textContent = `${formatMoney(contributions)} de ${formatMoney(state.goal)}`;
+    } else {
+      goalPercentText.textContent = "0.0%";
+      goalProgressFill.style.width = "0%";
+      goalDetailText.textContent = "Meta no establecida";
+    }
 
-    contribTable.innerHTML = "";
-    state.contributions.forEach(c => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${formatMoney(c.amount)}</td>
-        <td>${convertToUTCMinus5(c.date).toLocaleDateString("es-CO")}</td>
-        <td style="display:flex;gap:6px;">
-          <button class="btn-small" data-action="edit-contrib" data-id="${c.id}">Editar</button>
-          <button class="btn-small" data-action="delete-contrib" data-id="${c.id}">Eliminar</button>
-        </td>`;
-      contribTable.appendChild(tr);
-    });
-
-    withdrawalTable.innerHTML = "";
-    state.withdrawals.forEach(w => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${formatMoney(w.amount)}</td>
-        <td>${convertToUTCMinus5(w.date).toLocaleDateString("es-CO")}</td>
-        <td style="display:flex;gap:6px;">
-          <button class="btn-small" data-action="edit-withdrawal" data-id="${w.id}">Editar</button>
-          <button class="btn-small" data-action="delete-withdrawal" data-id="${w.id}">Eliminar</button>
-        </td>`;
-      withdrawalTable.appendChild(tr);
-    });
+    renderSavingsHistory();
 
 
     profileIncome.textContent = formatMoney(incomes);
@@ -2326,22 +2646,87 @@ display: none;
     ratioExpenseIncome.textContent = incomes > 0 ? ((expenses / incomes)*100).toFixed(1) + "%" : "—";
     if (state.goal != null && state.goal > 0) {
       const percent = Math.min(100, Math.max(0, (contributions / state.goal)*100));
-      ratioGoal.textContent = `${percent.toFixed(1)}%`;
-      goalPercent.textContent = `${percent.toFixed(1)}%`;
-      circlePercentText.textContent = `${percent.toFixed(1)}%`;
-      goalDetail.textContent = `${formatMoney(contributions)} de ${formatMoney(state.goal)}`;
+      if (ratioGoal) ratioGoal.textContent = `${percent.toFixed(1)}%`;
+      if (goalPercent) goalPercent.textContent = `${percent.toFixed(1)}%`;
+      if (goalPercentReport) goalPercentReport.textContent = `${percent.toFixed(1)}%`;
     } else {
-      ratioGoal.textContent = "—";
-      goalPercent.textContent = "0%";
-      circlePercentText.textContent = "0%";
-      goalDetail.textContent = "Meta no establecida";
+      if (ratioGoal) ratioGoal.textContent = "—";
+      if (goalPercent) goalPercent.textContent = "0%";
+      if (goalPercentReport) goalPercentReport.textContent = "0.0%";
     }
 
-    renderInicioTable();
-    drawCharts();
+    try {
+      renderInicioTable();
+    } catch (e) {
+      console.error("Error rendering inicio table:", e);
+    }
+    
+    try {
+      drawCharts();
+    } catch (e) {
+      console.error("Error drawing charts:", e);
+    }
+    
+    updateDateDisplays();
+  }
+
+  function renderSavingsHistory() {
+    if (!contribListModern || !withdrawalListModern) return;
+
+    // Contributions
+    if (state.contributions.length === 0) {
+      contribListModern.innerHTML = `<div class="small" style="text-align:center; padding:1rem; opacity:0.5;">Sin aportes aún</div>`;
+    } else {
+      contribListModern.innerHTML = "";
+      state.contributions.forEach(c => {
+        const item = document.createElement("div");
+        item.className = "history-item-savings";
+        item.innerHTML = `
+          <div>
+            <div class="amount">${formatMoney(c.amount)}</div>
+            <div class="date">${convertToUTCMinus5(c.date).toLocaleDateString("es-CO")}</div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn-small" style="background:rgba(255,255,255,0.05); width:32px; height:32px; padding:0; border-radius:8px;" data-action="edit-contrib" data-id="${c.id}">
+              <i class="fa-solid fa-pen" style="font-size:0.7rem;"></i>
+            </button>
+            <button class="btn-small" style="background:rgba(255,255,255,0.05); width:32px; height:32px; padding:0; border-radius:8px;" data-action="delete-contrib" data-id="${c.id}">
+              <i class="fa-solid fa-trash" style="font-size:0.7rem;"></i>
+            </button>
+          </div>
+        `;
+        contribListModern.appendChild(item);
+      });
+    }
+
+    // Withdrawals
+    if (state.withdrawals.length === 0) {
+      withdrawalListModern.innerHTML = `<div class="small" style="text-align:center; padding:1rem; opacity:0.5;">Sin retiros aún</div>`;
+    } else {
+      withdrawalListModern.innerHTML = "";
+      state.withdrawals.forEach(w => {
+        const item = document.createElement("div");
+        item.className = "history-item-savings withdrawal";
+        item.innerHTML = `
+          <div>
+            <div class="amount">-${formatMoney(w.amount)}</div>
+            <div class="date">${convertToUTCMinus5(w.date).toLocaleDateString("es-CO")}</div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn-small" style="background:rgba(255,255,255,0.05); width:32px; height:32px; padding:0; border-radius:8px;" data-action="edit-withdrawal" data-id="${w.id}">
+              <i class="fa-solid fa-pen" style="font-size:0.7rem;"></i>
+            </button>
+            <button class="btn-small" style="background:rgba(255,255,255,0.05); width:32px; height:32px; padding:0; border-radius:8px;" data-action="delete-withdrawal" data-id="${w.id}">
+              <i class="fa-solid fa-trash" style="font-size:0.7rem;"></i>
+            </button>
+          </div>
+        `;
+        withdrawalListModern.appendChild(item);
+      });
+    }
+
     attachContributionActions();
     attachWithdrawalActions();
-    updateDateDisplays();
   }
 
   function renderInicioTable() {
@@ -2481,7 +2866,7 @@ display: none;
         labels: ["Ingresos", "Gastos"],
         datasets: [{
           data: [incomes, expenses],
-          backgroundColor: ["#10b981", "#ef4444"],
+          backgroundColor: ["#10b981", "#f87171"],
           hoverOffset: 15,
           borderWidth: 0,
           borderRadius: 2
@@ -2508,15 +2893,18 @@ display: none;
         labels: ["Meta", "Aportado"],
         datasets: [{
           data: [goalAmount, saved],
-          backgroundColor: ["rgba(139, 92, 246, 0.2)", "rgba(16, 185, 129, 0.8)"],
-          borderColor: ["#8b5cf6", "#10b981"],
-          borderWidth: 2,
+          backgroundColor: ["rgba(59, 130, 246, 0.5)", "#10b981"],
+          borderColor: ["#3b82f6", "#10b981"],
+          borderWidth: 0,
           borderRadius: 12,
-          barThickness: 40
+          barThickness: 35
         }]
       },
       options: {
-        plugins: { legend: { display: false } },
+        plugins: { 
+          legend: { display: false },
+          tooltip: { callbacks: { label: c => ` ${c.label}: ${formatMoney(c.parsed)}` } }
+        },
         scales: {
           y: { 
             beginAtZero: true, 
@@ -2564,18 +2952,30 @@ display: none;
 
   // Ahorro
   btnSetGoal.addEventListener("click", async () => {
+    const val = parseFloat(inputGoal.value);
+    if (isNaN(val) || val < 0) { showToast("Meta inválida", "error"); return; }
     if (!currentUid || isGuestUser) {
+      if (isGuestUser) {
+        state.goal = val;
+        refreshAllViews();
+        showToast("Meta guardada localmente", "success");
+        return;
+      }
       showRegistrationPrompt("Para establecer una meta de ahorro, por favor regístrate.");
       return;
     }
-    const val = parseFloat(inputGoal.value);
-    if (isNaN(val) || val < 0) { showToast("Meta inválida", "error"); return; }
     await window.FirebaseHelpers.setGoal(currentUid, val);
     inputGoal.value="";
     showToast("Meta guardada", "success");
   });
   btnClearGoal.addEventListener("click", async () => {
     if (!currentUid || isGuestUser) {
+      if (isGuestUser) {
+        state.goal = null;
+        refreshAllViews();
+        showToast("Meta borrada localmente", "success");
+        return;
+      }
       showRegistrationPrompt("Para borrar una meta de ahorro, por favor regístrate.");
       return;
     }
@@ -2585,25 +2985,46 @@ display: none;
     });
   });
   btnAddContribution.addEventListener("click", async () => {
+    const val = parseFloat(inputContribution.value);
+    if (isNaN(val) || val <= 0) { showToast("Monto inválido", "error"); return; }
     if (!currentUid || isGuestUser) {
+      if (isGuestUser) {
+        state.contributions.push({
+          id: Date.now().toString(),
+          amount: val,
+          date: new Date().toISOString()
+        });
+        refreshAllViews();
+        showToast("Aporte agregado localmente", "success");
+        return;
+      }
       showRegistrationPrompt("Para agregar aportes al ahorro, por favor regístrate.");
       return;
     }
-    const val = parseFloat(inputContribution.value);
-    if (isNaN(val) || val <=0){ showToast("Monto inválido", "error"); return; }
     await window.FirebaseHelpers.addSavingsContribution(currentUid, val);
     inputContribution.value="";
     showToast("Aporte agregado", "success");
   });
   btnWithdraw.addEventListener("click", async () => {
+    const val = parseFloat(inputWithdraw.value);
+    if (isNaN(val) || val <= 0) { showToast("Monto inválido", "error"); return; }
+    const { contributions } = aggregate();
+    if (val > contributions) { showToast("No tienes suficiente ahorro", "warning"); return; }
+
     if (!currentUid || isGuestUser) {
+      if (isGuestUser) {
+        state.withdrawals.push({
+          id: Date.now().toString(),
+          amount: val,
+          date: new Date().toISOString()
+        });
+        refreshAllViews();
+        showToast("Retiro realizado localmente", "success");
+        return;
+      }
       showRegistrationPrompt("Para retirar del ahorro, por favor regístrate.");
       return;
     }
-    const val = parseFloat(inputWithdraw.value);
-    if (isNaN(val) || val <=0){ showToast("Monto inválido", "error"); return; }
-    const { contributions } = aggregate();
-    if (val > contributions) { showToast("No tienes suficiente ahorro", "warning"); return; }
     await window.FirebaseHelpers.addSavingsWithdrawal(currentUid, val);
     inputWithdraw.value="";
     showToast("Retiro realizado", "success");
@@ -2803,12 +3224,17 @@ display: none;
   function renderMonthlyReportsTable() {
     monthlyReportsTable.innerHTML = "";
     state.monthlyReports.forEach(report => {
+      const savings = report.contributions || 0;
+      const goal = report.goal || 0;
+      const compliance = goal > 0 ? ((savings / goal) * 100).toFixed(0) + "%" : "—";
+      
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>${report.month}</td>
         <td>${formatMoney(report.incomes)}</td>
         <td>${formatMoney(report.expenses)}</td>
         <td>${formatMoney(report.contributions)}</td>
+        <td><span class="pill-small" style="background: rgba(139, 92, 246, 0.1); color: var(--accent-light);">${compliance}</span></td>
         <td style="display:flex;gap:6px;">
           <button class="btn-small" data-action="view-report" data-id="${report.id}">Ver</button>
           <button class="btn-small" data-action="delete-report" data-id="${report.id}">Eliminar</button>
@@ -2849,40 +3275,91 @@ display: none;
   }
 
   function openReportModal(report) {
-    modalTitle.innerHTML = `<strong>Reporte de ${report.month}</strong>`;
+    const totalExpenses = report.expenses || 0;
+    const balance = report.incomes - report.expenses;
+    const savings = report.contributions || 0;
+    const goal = report.goal || 0;
+    const compliancePct = goal > 0 ? Math.min(100, (savings / goal) * 100).toFixed(1) : "0.0";
+    
+    modalTitle.textContent = `Reporte Mensual`;
+    
+    let categoriesHtml = "";
+    const sortedCats = Object.entries(report.expenseByCategory || {}).sort((a, b) => b[1] - a[1]);
+    
+    sortedCats.forEach(([name, amount], index) => {
+      const pct = totalExpenses > 0 ? ((amount / totalExpenses) * 100).toFixed(1) : 0;
+      const meta = state.expenseCategoriesMeta[name] || { icon: "💸" };
+      const colors = ['#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#06b6d4'];
+      const barColor = colors[index % colors.length];
+
+      categoriesHtml += `
+        <div class="report-category-item">
+          <div class="report-category-info">
+            <div class="report-category-name-box">
+              <div class="report-category-icon">${meta.icon}</div>
+              <div class="report-category-details">
+                <span class="report-category-name">${name}</span>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div class="report-category-amount">${formatMoney(amount)}</div>
+              <div class="report-category-pct">${pct}%</div>
+            </div>
+          </div>
+          <div class="report-progress-bar">
+            <div class="report-progress-fill" style="width: ${pct}%; background: ${barColor};"></div>
+          </div>
+        </div>
+      `;
+    });
+
     modalBody.innerHTML = `
-      <div class="summary" style="margin-top:8px;">
-        <div class="summary-card">
-          <div><strong>Ingresos</strong></div>
-          <div style="font-size:1.3rem;">${formatMoney(report.incomes)}</div>
+      <div class="report-header-card">
+        <h3>${report.month}</h3>
+      </div>
+      
+      <div class="report-grid-3" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 1rem;">
+        <div class="report-stat-card income">
+          <i class="fa-solid fa-arrow-trend-up"></i>
+          <span class="label">Ingresos</span>
+          <span class="value">${formatMoney(report.incomes)}</span>
         </div>
-        <div class="summary-card">
-          <div><strong>Gastos</strong></div>
-          <div style="font-size:1.3rem;">${formatMoney(report.expenses)}</div>
+        <div class="report-stat-card expense">
+          <i class="fa-solid fa-arrow-trend-down"></i>
+          <span class="label">Gastos</span>
+          <span class="value">${formatMoney(report.expenses)}</span>
         </div>
-        <div class="summary-card">
-          <div><strong>Ahorro Neto</strong></div>
-          <div style="font-size:1.3rem;">${formatMoney(report.contributions)}</div>
+        <div class="report-stat-card balance">
+          <i class="fa-solid fa-wallet"></i>
+          <span class="label">Balance</span>
+          <span class="value">${formatMoney(balance)}</span>
         </div>
-        <div class="summary-card">
-          <div><strong>Meta de Ahorro</strong></div>
-          <div style="font-size:1.3rem;">${report.goal != null ? formatMoney(report.goal) : "No establecida"}</div>
+        <div class="report-stat-card savings">
+          <i class="fa-solid fa-piggy-bank"></i>
+          <span class="label">Ahorro Neto</span>
+          <span class="value">${formatMoney(savings)}</span>
         </div>
       </div>
-      <div style="display:grid;gap:16px;margin-top:14px;grid-template-columns:1fr;">
-        <div class="card" style="padding:12px;">
-          <div><strong>Ingresos vs Gastos</strong></div>
-          <div class="small">Comparación</div>
-          <div class="chart-container">
-            <canvas id="chart-report-income-vs-expense"></canvas>
+
+      <div class="report-goal-card">
+        <div class="report-goal-header">
+          <div class="report-goal-title">
+            <i class="fa-solid fa-bullseye"></i> Cumplimiento Meta
           </div>
+          <div class="report-goal-pct">${compliancePct}%</div>
         </div>
-        <div class="card" style="padding:12px;">
-          <div><strong>Desglose por categoría (gastos)</strong></div>
-          <div class="small">A dónde se fue el dinero</div>
-          <div class="chart-container">
-            <canvas id="chart-report-category-expense"></canvas>
-          </div>
+        <div class="report-goal-bar">
+          <div class="report-goal-fill" style="width: ${compliancePct}%;"></div>
+        </div>
+        <div class="report-goal-detail">
+          ${formatMoney(savings)} de ${goal > 0 ? formatMoney(goal) : "$0.00"}
+        </div>
+      </div>
+      
+      <div style="margin-bottom: 1rem;">
+        <h4 style="margin: 0 0 1.25rem 0; font-size: 1rem; font-weight: 800; color: #fff;">Gastos por categoría</h4>
+        <div class="report-category-list">
+          ${categoriesHtml || '<div class="small" style="text-align:center; padding: 2rem; opacity:0.5;">No hay gastos registrados en este periodo.</div>'}
         </div>
       </div>
     `;
@@ -2892,52 +3369,6 @@ display: none;
     modalCancel.onclick = closeModal;
     closeModalBtn.onclick = closeModal;
     modal.style.display = "flex";
-
-    if (chartReportIncomeVsExpense) chartReportIncomeVsExpense.destroy();
-    chartReportIncomeVsExpense = new Chart(document.getElementById("chart-report-income-vs-expense"), {
-      type: "doughnut",
-      data: {
-        labels: ["Ingresos", "Gastos"],
-        datasets: [{
-          data: [report.incomes, report.expenses],
-          backgroundColor: ["#10b981","#f87171"],
-          hoverOffset:6,
-          borderWidth:0
-        }]
-      },
-      options: {
-        plugins: {
-          legend:{position:"bottom", labels:{boxWidth:12}},
-          tooltip:{callbacks:{label: c => `${c.label}: ${formatMoney(c.parsed)}`}}
-        },
-        cutout: "60%",
-        responsive:true,
-        maintainAspectRatio:false
-      }
-    });
-
-    const reportExpenseByCatLabels = Object.keys(report.expenseByCategory);
-    const reportExpenseByCatData = reportExpenseByCatLabels.map(l => report.expenseByCategory[l]);
-    if (chartReportCategoryExpense) chartReportCategoryExpense.destroy();
-    chartReportCategoryExpense = new Chart(document.getElementById("chart-report-category-expense"), {
-      type: "pie",
-      data: {
-        labels: reportExpenseByCatLabels,
-        datasets:[{
-          data: reportExpenseByCatData,
-          backgroundColor: reportExpenseByCatLabels.map((_,i)=>`hsl(${(i*60)%360} 70% 60%)`),
-          borderWidth:0
-        }]
-      },
-      options:{
-        plugins:{
-          legend:{position:"bottom", labels:{boxWidth:12}},
-          tooltip:{callbacks:{label: c => `${c.label}: ${formatMoney(c.parsed)}`}}
-        },
-        responsive:true,
-        maintainAspectRatio:false
-      }
-    });
   }
 
   // Expense Limit functionality
@@ -3128,10 +3559,19 @@ display: none;
         <div class="icon"><i class="fa-solid fa-plus"></i></div>
         <div class="name">Nueva</div>
       `;
-      addNew.onclick = () => openCreateCategoryModal(currentType, (newName) => {
-        selectedCategory = newName;
-        renderCategoryGrid();
-      });
+      addNew.onclick = () => {
+        const currentState = {
+          type: currentType,
+          amount: amountInput.value,
+          desc: descInput.value,
+          date: dateInput.value,
+          category: selectedCategory
+        };
+        openCreateCategoryModal(currentType, currentState, (newName) => {
+          selectedCategory = newName;
+          renderCategoryGrid();
+        });
+      };
       grid.appendChild(addNew);
     }
 
@@ -3202,16 +3642,11 @@ display: none;
     amountInput.focus();
   }
 
-  function openCreateCategoryModal(type, onCreated) {
+  function openCreateCategoryModal(type, prevState, onCreated) {
     if (!currentUid || isGuestUser) {
       showRegistrationPrompt("Para crear nuevas categorías, por favor regístrate.");
       return;
     }
-
-    // Reuse the modal for sub-creation
-    const prevBody = modalBody.innerHTML;
-    const prevTitle = modalTitle.textContent;
-    const prevSaveLabel = modalSave.textContent;
 
     modalTitle.textContent = "Nueva Categoría";
     modalBody.innerHTML = `
@@ -3227,7 +3662,6 @@ display: none;
     const iconGrid = document.getElementById("icon-selector-grid");
     let selectedIcon = type === "income" ? "💼" : "💸";
 
-    // Flatten emoji library for selection
     const allIcons = Object.values(emojiLibrary).flat();
     allIcons.forEach(emoji => {
       const btn = document.createElement("div");
@@ -3245,6 +3679,27 @@ display: none;
       iconGrid.appendChild(btn);
     });
 
+    const restoreTransactionModal = (newCatName = null) => {
+      const title = type === "income" ? "Agregar ingreso" : "Agregar gasto";
+      const existingData = {
+        type: prevState.type,
+        amount: prevState.amount,
+        desc: prevState.desc,
+        date: prevState.date,
+        category: newCatName || prevState.category
+      };
+      openTransactionModal(title, existingData, async (payload) => {
+        if (!currentUid || isGuestUser) {
+          state.transactions.push({ id: Date.now().toString(), ...payload, created: new Date().toISOString() });
+          refreshAllViews();
+          showAlert("Información", "Transacción agregada localmente.");
+          return;
+        }
+        await window.FirebaseHelpers.addTransaction(currentUid, payload);
+        showAlert("Éxito", `${type === 'income' ? 'Ingreso' : 'Gasto'} agregado exitosamente.`);
+      });
+    };
+
     modalSave.onclick = async () => {
       const name = document.getElementById("new-cat-name-input").value.trim();
       if (!name) { showToast("Ingresa un nombre", "warning"); return; }
@@ -3252,7 +3707,6 @@ display: none;
       await window.FirebaseHelpers.addCategory(currentUid, type, name, selectedIcon);
       showToast("Categoría creada", "success");
       
-      // Wait a bit for Firestore snapshot to update state if possible, or manual update
       if (type === "income") {
         if (!state.incomeCategories.includes(name)) state.incomeCategories.push(name);
         state.incomeCategoriesMeta[name] = { icon: selectedIcon };
@@ -3262,17 +3716,11 @@ display: none;
       }
 
       onCreated(name);
-      openTransactionModal(prevTitle, null, (p) => { /* this is tricky because we lost the original onSave callback context easily if not careful, but openTransactionModal is called from buttons usually */ });
-      // Actually, it's better to just go back. 
-      // But since we are nested, let's just re-open the original modal type
-      if (prevTitle.includes("ingreso")) btnAddIncomeMain.click();
-      else btnAddExpenseMain.click();
+      restoreTransactionModal(name);
     };
 
-    modalCancel.onclick = () => {
-      if (prevTitle.includes("ingreso")) btnAddIncomeMain.click();
-      else btnAddExpenseMain.click();
-    };
+    modalCancel.onclick = () => restoreTransactionModal();
+    closeModalBtn.onclick = () => restoreTransactionModal();
   }
 
   function closeModal(){ modal.style.display="none"; modalBody.innerHTML=""; }
@@ -3303,6 +3751,10 @@ display: none;
       const target = item.dataset.target;
       document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
       document.getElementById(target).classList.add("active");
+      
+      if (target === "informe-section") {
+        setTimeout(drawCharts, 50); // Small delay to ensure visibility
+      }
     });
   });
 </script>
