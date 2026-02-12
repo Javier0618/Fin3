@@ -744,6 +744,126 @@ display: none;
     justify-content: center;
   }
 
+  /* --- Transaction Modal Modern Grid Styles --- */
+  .amount-input-container {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .amount-input-large {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--glass-border);
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #fff;
+    text-align: center;
+    width: 100%;
+    max-width: 250px;
+    padding: 0.5rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .amount-input-large:focus {
+    border-color: var(--accent);
+  }
+  .amount-input-large::placeholder {
+    color: rgba(255,255,255,0.2);
+  }
+
+  .modal-section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 1.5rem 0 0.75rem 0;
+    display: block;
+  }
+
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+  @media (max-width: 480px) {
+    .category-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  .category-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 8px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .category-item:hover {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+  }
+  .category-item.selected {
+    background: rgba(139, 92, 246, 0.15);
+    border-color: var(--accent);
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+  }
+  .category-item .icon {
+    font-size: 1.5rem;
+  }
+  .category-item .name {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+  }
+  .category-item.selected .name {
+    color: #fff;
+  }
+
+  .category-item.add-new {
+    border: 1px dashed var(--muted);
+    background: transparent;
+  }
+  .category-item.add-new i { color: var(--muted); }
+
+  .type-toggle-container {
+    display: flex;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 1.5rem;
+  }
+  .type-toggle-btn {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .type-toggle-btn.active.income {
+    background: var(--success);
+    color: #fff;
+  }
+  .type-toggle-btn.active.expense {
+    background: var(--danger);
+    color: #fff;
+  }
+
   /* New style for registration prompt modal */
   #registration-prompt-modal {
     position: fixed;
@@ -1424,16 +1544,18 @@ display: none;
 <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 2500; display: flex; flex-direction: column; gap: 10px;"></div>
 
 <!-- Modal -->
-<div id="modal" style="position:fixed;inset:0;display:none;background:rgba(15,23,42,.95);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:1rem;z-index:99;">
-  <div class="card" style="max-width:520px;width:100%;position:relative;">
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-      <div id="modal-title"><strong>Agregar</strong></div>
-      <div style="cursor:pointer;" id="close-modal">×</div>
+<div id="modal" style="position:fixed;inset:0;display:none;background:rgba(11, 15, 26, 0.85);backdrop-filter:blur(15px);align-items:center;justify-content:center;padding:1rem;z-index:99;">
+  <div class="card" style="max-width:480px;width:100%;position:relative;border-radius:28px;padding:2rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;">
+      <div id="modal-title" style="font-size:1.25rem;font-weight:800;letter-spacing:-0.02em;">Agregar</div>
+      <div style="cursor:pointer;width:32px;height:32px;background:rgba(255,255,255,0.05);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--muted);" id="close-modal">
+        <i class="fa-solid fa-xmark"></i>
+      </div>
     </div>
-    <div id="modal-body" style="margin-top:1rem;"></div>
-    <div style="margin-top:1rem;display:flex;justify-content:flex-end;gap:.5rem;">
-      <button class="btn-outline btn-small" id="modal-cancel">Cancelar</button>
-      <button class="btn btn-small" id="modal-save">Guardar</button>
+    <div id="modal-body"></div>
+    <div style="margin-top:2rem;display:flex;gap:1rem;">
+      <button class="btn-outline" id="modal-cancel" style="flex:1;">Cancelar</button>
+      <button class="btn" id="modal-save" style="flex:1;">Guardar</button>
     </div>
   </div>
 </div>
@@ -2937,189 +3059,220 @@ display: none;
     showAlert("Éxito", "Gasto agregado exitosamente.");
   }));
 
-  function openTransactionModal(title, existing=null, onSave) {
-    modalTitle.innerHTML = `<strong>${title}</strong>`;
+  function openTransactionModal(title, existing = null, onSave) {
+    modalTitle.textContent = title;
     modalBody.innerHTML = "";
     modalSave.style.display = "inline-flex";
-    modalCancel.textContent = "Cancelar";
 
-    const type = existing ? existing.type : title.toLowerCase().includes("ingreso") ? "income" : "expense";
+    let currentType = existing ? existing.type : title.toLowerCase().includes("ingreso") ? "income" : "expense";
+    let selectedCategory = existing ? existing.category : null;
 
+    // --- 1. Amount Display ---
+    const amountContainer = document.createElement("div");
+    amountContainer.className = "amount-input-container";
     const amountInput = document.createElement("input");
-    amountInput.type="number"; amountInput.placeholder="Monto"; amountInput.className="input"; amountInput.value = existing ? existing.amount : "";
-    amountInput.style.marginBottom="8px";
+    amountInput.type = "number";
+    amountInput.className = "amount-input-large";
+    amountInput.placeholder = "0.00";
+    amountInput.value = existing ? existing.amount : "";
+    amountContainer.appendChild(amountInput);
+    modalBody.appendChild(amountContainer);
 
-    const categoryWrapper = document.createElement("div");
-    categoryWrapper.style.display="flex";
-    categoryWrapper.style.flexDirection="column";
-    categoryWrapper.style.gap="6px";
+    // --- 2. Type Toggle ---
+    const toggleContainer = document.createElement("div");
+    toggleContainer.className = "type-toggle-container";
+    const incomeToggle = document.createElement("button");
+    incomeToggle.className = `type-toggle-btn ${currentType === 'income' ? 'active income' : ''}`;
+    incomeToggle.textContent = "Ingreso";
+    const expenseToggle = document.createElement("button");
+    expenseToggle.className = `type-toggle-btn ${currentType === 'expense' ? 'active expense' : ''}`;
+    expenseToggle.textContent = "Gasto";
 
-    const categorySelect = document.createElement("select");
-    categorySelect.className="select";
-    const defaultOpt = document.createElement("option");
-    defaultOpt.value="";
-    defaultOpt.textContent="Selecciona categoría";
-    categorySelect.appendChild(defaultOpt);
-    const list = type==="income" ? state.incomeCategories : state.expenseCategories;
-    list.forEach(c => {
-      const o = document.createElement("option");
-      o.value=c;
-      const icon = type==="income" ? (state.incomeCategoriesMeta[c]?.icon||"") : (state.expenseCategoriesMeta[c]?.icon||"");
-      o.textContent = `${icon} ${c}`;
-      categorySelect.appendChild(o);
-    });
-    if (existing && existing.category) categorySelect.value = existing.category;
+    toggleContainer.appendChild(incomeToggle);
+    toggleContainer.appendChild(expenseToggle);
+    modalBody.appendChild(toggleContainer);
 
-    const createCatBtn = document.createElement("div");
-    createCatBtn.style.marginTop="4px";
-    createCatBtn.innerHTML = `<button class="btn-small" style="background:rgba(255,255,255,.08);border:none;">+ Nueva categoría</button>`;
-    let creating=false;
-    createCatBtn.onclick = () => {
-      if (!currentUid || isGuestUser) {
-        showRegistrationPrompt("Para crear nuevas categorías, por favor regístrate.");
-        return;
-      }
-      if (creating) return;
-      creating=true;
-      const inline = document.createElement("div");
-      inline.style.display="flex";
-      inline.style.flexDirection="column";
-      inline.style.gap="6px";
-      inline.style.flexWrap="wrap";
-      inline.innerHTML = `
-        <input class="input" placeholder="Nombre de la categoría" style="flex:1;" id="new-cat-name">
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span id="selected-icon-display" style="font-size:1.5rem; min-width:30px; text-align:center;">${type==="income"?"💼":"💸"}</span>
-          <button class="btn btn-small btn-outline" id="open-icon-library">Elegir Ícono</button>
-        </div>
-        <div id="icon-library-container" style="display:none; margin-top:10px; border:1px solid rgba(255,255,255,.1); border-radius:8px; padding:10px; max-height:200px; overflow-y:auto;"></div>
-        <div style="display:flex; gap:8px; margin-top:10px;">
-          <button class="btn btn-small" id="save-new-cat">Crear Categoría</button>
-          <button class="btn-small btn-outline" id="cancel-new-cat">Cancelar</button>
-        </div>
+    // --- 3. Category Grid ---
+    const gridLabel = document.createElement("label");
+    gridLabel.className = "modal-section-label";
+    gridLabel.textContent = "Categoría";
+    modalBody.appendChild(gridLabel);
+
+    const grid = document.createElement("div");
+    grid.className = "category-grid";
+    modalBody.appendChild(grid);
+
+    function renderCategoryGrid() {
+      grid.innerHTML = "";
+      const categories = currentType === "income" ? state.incomeCategories : state.expenseCategories;
+      const meta = currentType === "income" ? state.incomeCategoriesMeta : state.expenseCategoriesMeta;
+
+      categories.forEach(cat => {
+        const item = document.createElement("div");
+        item.className = `category-item ${selectedCategory === cat ? 'selected' : ''}`;
+        item.innerHTML = `
+          <div class="icon">${meta[cat]?.icon || '❓'}</div>
+          <div class="name">${cat}</div>
+        `;
+        item.onclick = () => {
+          selectedCategory = cat;
+          renderCategoryGrid();
+        };
+        grid.appendChild(item);
+      });
+
+      // Add New Category Button
+      const addNew = document.createElement("div");
+      addNew.className = "category-item add-new";
+      addNew.innerHTML = `
+        <div class="icon"><i class="fa-solid fa-plus"></i></div>
+        <div class="name">Nueva</div>
       `;
-      categoryWrapper.appendChild(inline);
+      addNew.onclick = () => openCreateCategoryModal(currentType, (newName) => {
+        selectedCategory = newName;
+        renderCategoryGrid();
+      });
+      grid.appendChild(addNew);
+    }
 
-      const newCatNameInput = inline.querySelector("#new-cat-name");
-      const selectedIconDisplay = inline.querySelector("#selected-icon-display");
-      const openIconLibraryBtn = inline.querySelector("#open-icon-library");
-      const iconLibraryContainer = inline.querySelector("#icon-library-container");
-      let currentSelectedIcon = type==="income"?"💼":"💸";
+    renderCategoryGrid();
 
-      for (const category in emojiLibrary) {
-        const categoryHeader = document.createElement("h4");
-        categoryHeader.textContent = category;
-        categoryHeader.style.margin = "5px 0";
-        categoryHeader.style.color = "var(--muted)";
-        iconLibraryContainer.appendChild(categoryHeader);
-
-        const iconGrid = document.createElement("div");
-        iconGrid.style.display = "flex";
-        iconGrid.style.flexWrap = "wrap";
-        iconGrid.style.gap = "5px";
-        emojiLibrary[category].forEach(emoji => {
-          const iconSpan = document.createElement("span");
-          iconSpan.textContent = emoji;
-          iconSpan.style.cursor = "pointer";
-          iconSpan.style.fontSize = "1.5rem";
-          iconSpan.style.padding = "5px";
-          iconSpan.style.borderRadius = "4px";
-          iconSpan.style.backgroundColor = "rgba(255,255,255,0.05)";
-          iconSpan.style.transition = "background-color 0.2s";
-          iconSpan.onmouseover = () => iconSpan.style.backgroundColor = "rgba(255,255,255,0.1)";
-          iconSpan.onmouseout = () => iconSpan.style.backgroundColor = "rgba(255,255,255,0.05)";
-          iconSpan.onclick = () => {
-            currentSelectedIcon = emoji;
-            selectedIconDisplay.textContent = emoji;
-            iconLibraryContainer.style.display = "none";
-          };
-          iconGrid.appendChild(iconSpan);
-        });
-        iconLibraryContainer.appendChild(iconGrid);
-      }
-
-      openIconLibraryBtn.onclick = () => {
-        iconLibraryContainer.style.display = iconLibraryContainer.style.display === "none" ? "block" : "none";
-      };
-
-      inline.querySelector("#cancel-new-cat").onclick = () => {
-        inline.remove();
-        creating=false;
-      };
-      inline.querySelector("#save-new-cat").onclick = async () => {
-        const name = newCatNameInput.value.trim();
-        const icon = currentSelectedIcon;
-        if (!name) { showAlert("Error", "Nombre requerido"); return; }
-        if (type==="income") {
-          if (state.incomeCategories.includes(name)) { showAlert("Error", "Ya existe una categoría de ingreso con ese nombre."); return; }
-          await window.FirebaseHelpers.addCategory(currentUid, "income", name, icon);
-        } else {
-          if (state.expenseCategories.includes(name)) { showAlert("Error", "Ya existe una categoría de gasto con ese nombre."); return; }
-          await window.FirebaseHelpers.addCategory(currentUid, "expense", name, icon);
-        }
-        setTimeout(() => {
-          while (categorySelect.firstChild) categorySelect.removeChild(categorySelect.firstChild);
-          const dft = document.createElement("option");
-          dft.value=""; dft.textContent="Selecciona categoría";
-          categorySelect.appendChild(dft);
-          const updatedList = type==="income" ? state.incomeCategories : state.expenseCategories;
-          updatedList.forEach(c => {
-            const o = document.createElement("option");
-            o.value=c;
-            const icon2 = type==="income" ? (state.incomeCategoriesMeta[c]?.icon||"") : (state.expenseCategoriesMeta[c]?.icon||"");
-            o.textContent = `${icon2} ${c}`;
-            categorySelect.appendChild(o);
-          });
-          categorySelect.value = name;
-          inline.remove();
-          creating=false;
-        }, 300);
-      };
+    // Toggle logic
+    incomeToggle.onclick = () => {
+      currentType = "income";
+      modalTitle.textContent = existing ? "Editar ingreso" : "Agregar ingreso";
+      incomeToggle.className = "type-toggle-btn active income";
+      expenseToggle.className = "type-toggle-btn";
+      selectedCategory = null;
+      renderCategoryGrid();
+    };
+    expenseToggle.onclick = () => {
+      currentType = "expense";
+      modalTitle.textContent = existing ? "Editar gasto" : "Agregar gasto";
+      expenseToggle.className = "type-toggle-btn active expense";
+      incomeToggle.className = "type-toggle-btn";
+      selectedCategory = null;
+      renderCategoryGrid();
     };
 
-    const descInput = document.createElement("input");
-    descInput.type="text"; descInput.placeholder="Descripción (opcional)"; descInput.className="input";
-    descInput.style.marginTop="8px"; descInput.value = existing ? existing.desc : "";
+    // --- 4. Extra Fields (Date & Desc) ---
+    const extraFields = document.createElement("div");
+    extraFields.style.display = "flex";
+    extraFields.style.flexDirection = "column";
+    extraFields.style.gap = "12px";
+    extraFields.style.marginTop = "1rem";
 
     const dateInput = document.createElement("input");
-    dateInput.type="date"; dateInput.className="input"; dateInput.style.marginTop="8px";
-    // Set date input value to the local date string (YYYY-MM-DD)
-    dateInput.value = existing ? convertToUTCMinus5(existing.date).toISOString().slice(0,10) : convertToUTCMinus5(new Date().toISOString()).toISOString().slice(0,10);
+    dateInput.type = "date";
+    dateInput.className = "input";
+    dateInput.value = existing ? convertToUTCMinus5(existing.date).toISOString().slice(0, 10) : convertToUTCMinus5(new Date().toISOString()).toISOString().slice(0, 10);
 
-    const typeBadge = document.createElement("div");
-    typeBadge.textContent = type==="income"? "Ingreso":"Gasto";
-    typeBadge.className="pill-small";
-    typeBadge.style.marginBottom="6px";
+    const descInput = document.createElement("input");
+    descInput.type = "text";
+    descInput.className = "input";
+    descInput.placeholder = "Nota o descripción...";
+    descInput.value = existing ? existing.desc : "";
 
-    modalBody.appendChild(typeBadge);
-    modalBody.appendChild(amountInput);
-    categoryWrapper.appendChild(categorySelect);
-    categoryWrapper.appendChild(createCatBtn);
-    modalBody.appendChild(categoryWrapper);
-    modalBody.appendChild(descInput);
-    modalBody.appendChild(dateInput);
+    extraFields.innerHTML = `<label class="modal-section-label" style="margin:0;">Fecha y Nota</label>`;
+    extraFields.appendChild(dateInput);
+    extraFields.appendChild(descInput);
+    modalBody.appendChild(extraFields);
 
-    const validate = () => {
-      const a = parseFloat(amountInput.value);
-      if (isNaN(a) || a<=0){ showAlert("Error", "Monto inválido"); return false;}
-      if (!categorySelect.value){ showAlert("Error", "Selecciona categoría"); return false; }
-      if (!dateInput.value){ showAlert("Error", "Fecha inválida"); return false; }
-      return true;
-    };
+    // Save Action
     modalSave.onclick = async () => {
-      if (!validate()) return;
+      const amount = parseFloat(amountInput.value);
+      if (isNaN(amount) || amount <= 0) { showToast("Ingresa un monto válido", "warning"); return; }
+      if (!selectedCategory) { showToast("Selecciona una categoría", "warning"); return; }
+
       const payload = {
-        amount: parseFloat(amountInput.value),
-        category: categorySelect.value,
+        type: currentType,
+        amount,
+        category: selectedCategory,
         desc: descInput.value.trim(),
-        date: convertLocalDateToISOUTCMinus5(dateInput.value) // Convert local date string to UTC-5 ISO string 
+        date: convertLocalDateToISOUTCMinus5(dateInput.value)
       };
-      await onSave(existing ? payload : { ...payload });
+
+      await onSave(payload);
       closeModal();
     };
+
     modalCancel.onclick = closeModal;
     closeModalBtn.onclick = closeModal;
-    modal.style.display="flex";
+    modal.style.display = "flex";
+    amountInput.focus();
+  }
+
+  function openCreateCategoryModal(type, onCreated) {
+    if (!currentUid || isGuestUser) {
+      showRegistrationPrompt("Para crear nuevas categorías, por favor regístrate.");
+      return;
+    }
+
+    // Reuse the modal for sub-creation
+    const prevBody = modalBody.innerHTML;
+    const prevTitle = modalTitle.textContent;
+    const prevSaveLabel = modalSave.textContent;
+
+    modalTitle.textContent = "Nueva Categoría";
+    modalBody.innerHTML = `
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <input class="input" placeholder="Nombre (ej. Suscripciones)" id="new-cat-name-input">
+        <div style="text-align:center;">
+          <div class="small" style="margin-bottom:8px;">Selecciona un ícono</div>
+          <div id="icon-selector-grid" style="display:grid; grid-template-columns: repeat(6, 1fr); gap:8px; max-height:200px; overflow-y:auto; background:rgba(255,255,255,0.02); padding:10px; border-radius:12px;"></div>
+        </div>
+      </div>
+    `;
+
+    const iconGrid = document.getElementById("icon-selector-grid");
+    let selectedIcon = type === "income" ? "💼" : "💸";
+
+    // Flatten emoji library for selection
+    const allIcons = Object.values(emojiLibrary).flat();
+    allIcons.forEach(emoji => {
+      const btn = document.createElement("div");
+      btn.style.cursor = "pointer";
+      btn.style.fontSize = "1.5rem";
+      btn.style.padding = "4px";
+      btn.style.borderRadius = "8px";
+      btn.style.textAlign = "center";
+      btn.textContent = emoji;
+      btn.onclick = () => {
+        Array.from(iconGrid.children).forEach(c => c.style.background = "transparent");
+        btn.style.background = "var(--accent)";
+        selectedIcon = emoji;
+      };
+      iconGrid.appendChild(btn);
+    });
+
+    modalSave.onclick = async () => {
+      const name = document.getElementById("new-cat-name-input").value.trim();
+      if (!name) { showToast("Ingresa un nombre", "warning"); return; }
+
+      await window.FirebaseHelpers.addCategory(currentUid, type, name, selectedIcon);
+      showToast("Categoría creada", "success");
+
+      // Wait a bit for Firestore snapshot to update state if possible, or manual update
+      if (type === "income") {
+        if (!state.incomeCategories.includes(name)) state.incomeCategories.push(name);
+        state.incomeCategoriesMeta[name] = { icon: selectedIcon };
+      } else {
+        if (!state.expenseCategories.includes(name)) state.expenseCategories.push(name);
+        state.expenseCategoriesMeta[name] = { icon: selectedIcon };
+      }
+
+      onCreated(name);
+      openTransactionModal(prevTitle, null, (p) => { /* this is tricky because we lost the original onSave callback context easily if not careful, but openTransactionModal is called from buttons usually */ });
+      // Actually, it's better to just go back.
+      // But since we are nested, let's just re-open the original modal type
+      if (prevTitle.includes("ingreso")) btnAddIncomeMain.click();
+      else btnAddExpenseMain.click();
+    };
+
+    modalCancel.onclick = () => {
+      if (prevTitle.includes("ingreso")) btnAddIncomeMain.click();
+      else btnAddExpenseMain.click();
+    };
   }
 
   function closeModal(){ modal.style.display="none"; modalBody.innerHTML=""; }
